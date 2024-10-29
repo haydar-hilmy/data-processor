@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./components/Layouts/Home";
 import './css/main.css'
+import Dataset from "./components/Fragments/Dataset";
 
 const App = () => {
 
@@ -9,6 +10,10 @@ const App = () => {
       path: "/",
       element: <Home />,
     },
+    {
+      path: "/test",
+      element: <Dataset />,
+    }
   ]);
 
   return (

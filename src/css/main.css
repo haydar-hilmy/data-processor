@@ -1,0 +1,7 @@
+.table-wrap{
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+    width: 95%;
+    align-items: flex-start;
+}

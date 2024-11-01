@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DataGet from "../../func/DataGet"
 
-const DatasetPreview = ({ idDataset = null }) => {
+const Dataset = ({ idDataset = null }) => {
     const [dataset, setDataset] = useState([]);
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -48,4 +48,4 @@ const DatasetPreview = ({ idDataset = null }) => {
     )
 }
 
-export default DatasetPreview
+export default Dataset

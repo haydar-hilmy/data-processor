@@ -4,7 +4,8 @@ import ButtonLabelRemember from "./Button"
 
 let data = DataGet()
 
-const LabelRemember = () => {
+const LabelRemember = (props) => {
+    const { onclickBtn } = props
     if (data != null) {
         return (
             <div className="flex flex-col gap-2 w-full mt-2 items-center">
@@ -14,7 +15,7 @@ const LabelRemember = () => {
                 <div className="flex justify-center flex-wrap w-1/2 gap-2">
                     {
                         data.map((item) => (
-                            <ButtonLabelRemember key={item.id} text={item.name} />
+                            <ButtonLabelRemember onclick={() => onclickBtn(item.id, item.name)} key={item.id} text={item.name} />
                         ))
                     }
                 </div>

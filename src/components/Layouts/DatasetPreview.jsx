@@ -1,48 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import DataGet from "../../func/DataGet"
+import Dataset from '../Fragments/Dataset';
+import MainTitle from '../Elements/Texts/MainTitle';
+import MainButton from '../Elements/Button/MainButton';
+import TestingTs from '../../func/tensorflow/TestingTs';
 
-const DatasetPreview = () => {
-    const [dataset, setDataset] = useState([]);
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            let data = DataGet() || [];
-            if (data.length > 0) {
-                setDataset(data[data.length - 1].data);
-            }
-        }, 1000);
-        return () => clearTimeout(timer);
-    }, []);
+const DatasetPreview = (props) => {
+    const { idDataset, nameDataset } = props
 
-    return(
-        <>
-        <div className="csv-table">
-           
-           {dataset.length > 0 && (
-               <table className="table-auto border-collapse border border-gray-300 w-full">
-                   <thead>
-                       <tr>
-                           {Object.keys(dataset[0]).map((header, index) => (
-                               <th key={index} className="border border-gray-300 px-4 py-2">
-                                   {header}
-                               </th>
-                           ))}
-                       </tr>
-                   </thead>
-                   <tbody>
-                       {dataset.map((row, rowIndex) => (
-                           <tr key={rowIndex}>
-                               {Object.values(row).map((cell, cellIndex) => (
-                                   <td key={cellIndex} className="border border-gray-300 px-4 py-2">
-                                       {cell}
-                                   </td>
-                               ))}
-                           </tr>
-                       ))}
-                   </tbody>
-               </table>
-           )}
-       </div>
-        </>
+    return (
+        <div className='w-full flex flex-col items-center'>
+            <div className="w-11/12 flex flex-col gap-2 items-center">
+                <div className="w-full">
+                    <MainTitle text={nameDataset} className="font-medium text-primary-0 text-lg" tag="h1" />
+                </div>
+                <Dataset idDataset={idDataset} />
+                <div>
+                    <MainButton text="View Dataset" />
+                </div>
+            </div>
+        </div>
     )
 }
 

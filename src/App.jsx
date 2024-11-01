@@ -3,7 +3,7 @@ import Home from "./components/Layouts/Home";
 import './css/main.css'
 import Dataset from "./components/Fragments/Dataset";
 import DatasetPreview from "./components/Layouts/DatasetPreview";
-import DataGet from "./func/DataGet";
+import RightClickComponent from "./components/Test/Test_RightClick";
 
 const App = () => {
 
@@ -19,6 +19,10 @@ const App = () => {
     {
       path: "/test",
       element: <Dataset />
+    },
+    {
+      path: "/test2",
+      element: <RightClickComponent />
     }
   ]);
 
@@ -30,5 +34,3 @@ const App = () => {
 };
 
 export default App
-
-// BUTTON REMMBER DIBERI PARAMETER BERDASARKAN ID DATASETNYA

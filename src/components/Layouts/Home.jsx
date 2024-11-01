@@ -13,6 +13,14 @@ import getLocalStorageSize from '../../func/LocalStorageSize';
 const Home = () => {
     const [datacsv, setData] = useState([]);
     const [activeTab, setActiveTab] = useState('main');
+    const [idDataset, setIdDataset] = useState(null);
+    const [nameDataset, setNameDataset] = useState(null);
+
+    const handleLabelRemember = (id, name) => {
+        setIdDataset(id);
+        setNameDataset(name);
+        setActiveTab('DatasetPreview')
+    }
 
     const handleFileUpload = (event) => {
         if(getLocalStorageSize() > 4000){
@@ -41,8 +49,10 @@ const Home = () => {
     };
     
     useEffect(() => {
-        document.title = "DataMinim - Data Analytic";
+        document.title = "DataMinim - Data Analytics";
     }, []);
+
+
  
     return (
         <>
@@ -54,13 +64,13 @@ const Home = () => {
                             <MainTitle text="Dive into data and discover what you can do in a flash!" className="text-center text-base font-normal text-primary-0" />
                         </div>
                         <ButtonFile onchange={handleFileUpload} accept=".csv" name="data" text="Input CSV" />
-                        <LabelRemember />
+                        <LabelRemember onclickBtn={handleLabelRemember} />
                     </div>
                 </div>
             )}
 
             {activeTab === 'DatasetPreview' && (
-                <DatasetPreview />
+                <DatasetPreview idDataset={idDataset} nameDataset={nameDataset} />
             )}
         </>
     )

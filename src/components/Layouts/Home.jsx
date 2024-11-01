@@ -9,12 +9,32 @@ import Dataset from '../Fragments/Dataset';
 import DatasetPreview from './DatasetPreview';
 import LabelRemember from '../Elements/LabelRemember/Index';
 import getLocalStorageSize from '../../func/LocalStorageSize';
+import DatasetDelete from '../../func/DatasetDelete';
 
 const Home = () => {
     const [datacsv, setData] = useState([]);
     const [activeTab, setActiveTab] = useState('main');
     const [idDataset, setIdDataset] = useState(null);
     const [nameDataset, setNameDataset] = useState(null);
+    const [touchTimeout, setTouchTimeout] = useState(null);
+
+    // Hanlde Touch //Start
+    const handleLongPress = (id) => {
+        DatasetDelete(id)
+    };
+
+    const handleTouchStart = (id) => {
+        const timeout = setTimeout(() => handleLongPress(id), 500); // Durasi 500ms untuk long press
+        setTouchTimeout(timeout);
+    };
+
+    const handleTouchEnd = () => {
+        if (touchTimeout) {
+            clearTimeout(touchTimeout); // Hentikan timer jika sentuhan diangkat sebelum 500ms
+            setTouchTimeout(null);
+        }
+    };
+    // Hanlde Touch //End
 
     const handleLabelRemember = (id, name) => {
         setIdDataset(id);
@@ -22,15 +42,20 @@ const Home = () => {
         setActiveTab('DatasetPreview')
     }
 
+    const handleDeleteDataset = (event, id) => {
+        event.preventDefault()
+        DatasetDelete(id)
+    }
+
     const handleFileUpload = (event) => {
-        if(getLocalStorageSize() > 4000){
+        if (getLocalStorageSize() > 4000) {
             console.log("storage is full")
         }
 
         const file = event.target.files[0];
         const fileName = file.name;
 
-        
+
         if (file && file.type === "text/csv") {
             Papa.parse(file, {
                 header: true, // Parsing dengan header untuk mengidentifikasi kolom
@@ -43,17 +68,17 @@ const Home = () => {
         } else {
             alert("Please upload a valid CSV file.");
         }
-        
+
         setActiveTab('DatasetPreview')
         event.target.value = null;
     };
-    
+
     useEffect(() => {
         document.title = "DataMinim - Data Analytics";
     }, []);
 
 
- 
+
     return (
         <>
             {activeTab === 'main' && (
@@ -64,7 +89,7 @@ const Home = () => {
                             <MainTitle text="Dive into data and discover what you can do in a flash!" className="text-center text-base font-normal text-primary-0" />
                         </div>
                         <ButtonFile onchange={handleFileUpload} accept=".csv" name="data" text="Input CSV" />
-                        <LabelRemember onclickBtn={handleLabelRemember} />
+                        <LabelRemember ontouchEnd={handleTouchEnd} ontouchStart={handleTouchStart} oncontextMenu={handleDeleteDataset} onclickBtn={handleLabelRemember} />
                     </div>
                 </div>
             )}

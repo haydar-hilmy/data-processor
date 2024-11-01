@@ -43,8 +43,11 @@ const Home = () => {
     }
 
     const handleDeleteDataset = (event, id) => {
-        event.preventDefault()
-        DatasetDelete(id)
+        if(isDesktop()){   
+            event.preventDefault()
+            DatasetDelete(id)
+            console.log("ya, desktop")
+        }
     }
 
     const handleFileUpload = (event) => {
@@ -71,6 +74,10 @@ const Home = () => {
 
         setActiveTab('DatasetPreview')
         event.target.value = null;
+    };
+
+    const isDesktop = () => {
+        return !(typeof window !== 'undefined' && 'ontouchstart' in window);
     };
 
     useEffect(() => {

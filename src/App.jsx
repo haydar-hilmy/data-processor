@@ -4,6 +4,8 @@ import './css/main.css'
 import Dataset from "./components/Fragments/Dataset";
 import DatasetPreview from "./components/Layouts/DatasetPreview";
 import RightClickComponent from "./components/Test/Test_RightClick";
+import getColumnNamesFromCSV from "./func/tensorflow/getColNameDataset";
+import Test_getCol from "./components/Test/Test_getCol";
 
 const App = () => {
 
@@ -23,6 +25,10 @@ const App = () => {
     {
       path: "/test2",
       element: <RightClickComponent />
+    },
+    {
+      path: "/getcol",
+      element: <Test_getCol />
     }
   ]);
 

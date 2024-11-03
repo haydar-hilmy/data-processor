@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import MainTitle from '../Elements/Texts/MainTitle';
 import LabeledInput from '../Elements/LabeledInput/Index';
 import ButtonFile from '../Elements/Button/ButtonFile';
-import DataSaver from '../../func/DataSaver';
+import DataSaver from '../../func/DatasetSaver';
 import React, { useState } from 'react';
 import Papa from 'papaparse';
 import Dataset from '../Fragments/Dataset';
@@ -17,38 +17,47 @@ const Home = () => {
     const [idDataset, setIdDataset] = useState(null);
     const [nameDataset, setNameDataset] = useState(null);
     const [touchTimeout, setTouchTimeout] = useState(null);
+    const [dataUpdated, setdataUpdated] = useState(false);
+
+    const handleMoveTab = (page) => {
+        setActiveTab(page)
+    }
 
     // Hanlde Touch //Start
     const handleLongPress = (id) => {
-        DatasetDelete(id)
+        DatasetDelete(id).then(() => {
+            setdataUpdated(prev => !prev)
+        })
     };
 
     const handleTouchStart = (id) => {
-        const timeout = setTimeout(() => handleLongPress(id), 500); // Durasi 500ms untuk long press
+        const timeout = setTimeout(() => handleLongPress(id), 500);
         setTouchTimeout(timeout);
     };
 
     const handleTouchEnd = () => {
         if (touchTimeout) {
-            clearTimeout(touchTimeout); // Hentikan timer jika sentuhan diangkat sebelum 500ms
+            clearTimeout(touchTimeout);
             setTouchTimeout(null);
         }
     };
     // Hanlde Touch //End
 
+    const handleDeleteDataset = (event, id) => {
+        if(isDesktop()){   
+            event.preventDefault()
+            DatasetDelete(id).then(() => {
+                setdataUpdated(prev => !prev)
+            })
+        }
+    }
+    
     const handleLabelRemember = (id, name) => {
         setIdDataset(id);
         setNameDataset(name);
         setActiveTab('DatasetPreview')
     }
 
-    const handleDeleteDataset = (event, id) => {
-        if(isDesktop()){   
-            event.preventDefault()
-            DatasetDelete(id)
-            console.log("ya, desktop")
-        }
-    }
 
     const handleFileUpload = (event) => {
         if (getLocalStorageSize() > 4000) {
@@ -65,14 +74,14 @@ const Home = () => {
                 skipEmptyLines: true, // Melewati baris kosong
                 complete: (result) => {
                     setData(result.data); // Menyimpan data yang diparsing
-                    DataSaver(result.data, fileName);
+                    setIdDataset(DataSaver(result.data, fileName).id);
+                    setActiveTab('DatasetPreview')
                 },
             });
         } else {
             alert("Please upload a valid CSV file.");
         }
 
-        setActiveTab('DatasetPreview')
         event.target.value = null;
     };
 
@@ -96,13 +105,13 @@ const Home = () => {
                             <MainTitle text="Dive into data and discover what you can do in a flash!" className="text-center text-base font-normal text-primary-0" />
                         </div>
                         <ButtonFile onchange={handleFileUpload} accept=".csv" name="data" text="Input CSV" />
-                        <LabelRemember ontouchEnd={handleTouchEnd} ontouchStart={handleTouchStart} oncontextMenu={handleDeleteDataset} onclickBtn={handleLabelRemember} />
+                        <LabelRemember dataUpdated={dataUpdated} ontouchEnd={handleTouchEnd} ontouchStart={handleTouchStart} oncontextMenu={handleDeleteDataset} onclickBtn={handleLabelRemember} />
                     </div>
                 </div>
             )}
 
             {activeTab === 'DatasetPreview' && (
-                <DatasetPreview idDataset={idDataset} nameDataset={nameDataset} />
+                <DatasetPreview setCloseDataset={handleMoveTab} idDataset={idDataset} nameDataset={nameDataset} />
             )}
         </>
     )

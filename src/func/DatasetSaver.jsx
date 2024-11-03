@@ -17,6 +17,10 @@ const DataSaver = (data, fileName) => { // data must be {}
         }]
         localStorage.setItem('DF_DMINIM', JSON.stringify(dataString))
     }
+    return {
+        id: idDataset,
+        name: fileName
+    }
 }
 
 export default DataSaver

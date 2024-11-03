@@ -21,7 +21,13 @@
     flex-direction: column;
     overflow-x: auto;
     overflow-y: auto;
-    height: 80vh;
+    max-height: 80vh;
     width: 100%;
     align-items: flex-start;
+}
+
+.custom-dropdown{
+    appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import DataGet from "../../func/DataGet"
+import DataGet from "../../func/DatasetGet"
 
 const Dataset = ({ idDataset = null }) => {
     const [dataset, setDataset] = useState([]);
@@ -18,11 +18,11 @@ const Dataset = ({ idDataset = null }) => {
 
     return (
         <>
-            <div className="table-wrap border-green-500 border-2 rounded-md">
+            <div className="table-wrap border-2 rounded-md">
                 {dataset.length > 0 && (
                     <table className="table-auto border-collapse border border-gray-300 w-full">
                         <thead>
-                            <tr>
+                            <tr className="sticky top-0">
                                 {Object.keys(dataset[0]).map((header, index) => (
                                     <th key={index} className="border text-green-900 font-medium border-gray-300 bg-green-200 px-4 py-2">
                                         {header}

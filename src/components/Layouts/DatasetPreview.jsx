@@ -18,6 +18,7 @@ const DatasetPreview = (props) => {
 
     const [mainDataset, setMainDataset] = useState(null)
     const [columnNames, setColumnNames] = useState([])
+    const [dataSearch, setDataSearch] = useState([])
     const [isShowDataTesting, setShowDataTesting] = useState(true)
     const [isShowDataSearch, setShowDataSearch] = useState(false)
     const [selectedValueSearch, setSelectedValueSearch] = useState(null)
@@ -34,12 +35,11 @@ const DatasetPreview = (props) => {
 
     function searchData (data) {
         if(data != ""){
-            findData(data, selectedValueSearch, mainDataset)
+            setDataSearch(findData(data, selectedValueSearch, mainDataset))
             setShowDataSearch(true)
         } else {
             setShowDataSearch(false)
         }
-        console.log('search data: ', data, selectedValueSearch)
     }
 
     const handleSelectedChange = (value) => {
@@ -54,7 +54,7 @@ const DatasetPreview = (props) => {
                 <Dataset idDataset={idDataset} />
 
                 {isShowDataSearch ? (
-                    <Table thead={columnNames} setCloseTable={() => setShowDataTesting(!isShowDataTesting)} title="Result of search" />
+                    <Table tbody={dataSearch} thead={columnNames} setCloseTable={() => setShowDataSearch(!isShowDataSearch)} title="Result of search" />
                 ) : ("")}
 
                 <div className='flex w-full'>

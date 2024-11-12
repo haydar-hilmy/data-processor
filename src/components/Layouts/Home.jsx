@@ -4,8 +4,8 @@ import LabeledInput from '../Elements/LabeledInput/Index';
 import ButtonFile from '../Elements/Button/ButtonFile';
 import DataSaver from '../../func/DatasetSaver';
 import React, { useState } from 'react';
-import Papa from 'papaparse';
 import Dataset from '../Fragments/Dataset';
+import Papa from 'papaparse';
 import DatasetPreview from './DatasetPreview';
 import LabelRemember from '../Elements/LabelRemember/Index';
 import getLocalStorageSize from '../../func/LocalStorageSize';
@@ -60,8 +60,8 @@ const Home = () => {
 
 
     const handleFileUpload = (event) => {
-        if (getLocalStorageSize() > 4000) {
-            console.log("storage is full")
+        if (getLocalStorageSize() > 1000) {
+            console.log(`Storage: ${getLocalStorageSize()}`)
         }
 
         const file = event.target.files[0];
@@ -76,6 +76,7 @@ const Home = () => {
                     setData(result.data); // Menyimpan data yang diparsing
                     setIdDataset(DataSaver(result.data, fileName).id);
                     setActiveTab('DatasetPreview')
+                    setNameDataset(fileName)
                 },
             });
         } else {

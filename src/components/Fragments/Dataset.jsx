@@ -1,8 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import DataGet from "../../func/DatasetGet"
 
 const Dataset = ({ idDataset = null }) => {
-    const [dataset, setDataset] = useState([]);
+
+    const tableWrapperRef = useRef(null)
+    const [dataset, setDataset] = useState([])
+    const [maxCount, setMaxCount] = useState(20)
+
+    const handleScrollDataset = () => {
+        if (tableWrapperRef.current) {
+            const scrollTop = tableWrapperRef.current.scrollTop;
+            const scrollHeight = tableWrapperRef.current.scrollHeight;
+            const clientHeight = tableWrapperRef.current.clientHeight;
+
+            if(scrollTop + clientHeight >= (scrollHeight * 0.9)){
+                setMaxCount((prevCount) => prevCount + 20)
+            }
+        }
+    }
+
     useEffect(() => {
         const timer = setTimeout(() => {
             let data = DataGet(idDataset) || [];
@@ -18,7 +34,7 @@ const Dataset = ({ idDataset = null }) => {
 
     return (
         <>
-            <div className="table-wrap border-2 rounded-md">
+            <div ref={tableWrapperRef} onScroll={handleScrollDataset} className="table-wrap border-2 rounded-md">
                 {dataset.length > 0 && (
                     <table className="table-auto border-collapse border border-gray-300 w-full">
                         <thead>
@@ -31,7 +47,7 @@ const Dataset = ({ idDataset = null }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {dataset.map((row, rowIndex) => (
+                            {dataset.slice(0, maxCount).map((row, rowIndex) => (
                                 <tr key={rowIndex}>
                                     {Object.values(row).map((cell, cellIndex) => (
                                         <td key={cellIndex} className="border border-gray-300 px-3 py-2">

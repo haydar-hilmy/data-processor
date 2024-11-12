@@ -5,7 +5,8 @@ import { CloseOutlined } from "@mui/icons-material"
 
 const Table = (props) => {
     // thead must be: ['', '', '']
-    const { className, thead, title = null, setCloseTable } = props
+    const { className, thead, tbody, title = null, setCloseTable } = props
+
     return (
         <>
             {title != null ? (
@@ -31,6 +32,27 @@ const Table = (props) => {
                             </tr>
                         )}
                     </thead>
+                    <tbody>
+                        {tbody != null ? (
+                            tbody.length > 0 ? (
+                                tbody.map((item, idx) => (
+                                    <tr key={idx}>
+                                        {Object.values(item).map((value, valueIdx) => (
+                                            <td key={valueIdx} className="border border-gray-300 px-3 py-2">{value}</td>
+                                        ))}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td className="text-center py-2 font-medium text-primary-0" colSpan={thead.length || 1}>Data Not Found</td>
+                                </tr>
+                            )
+                        ) : (
+                            <tr>
+                                <td className="text-center py-2 font-medium text-primary-0" colSpan={thead.length || 1}>Failed to Load</td>
+                            </tr>
+                        )}
+                    </tbody>
                 </table>
             </div>
         </>

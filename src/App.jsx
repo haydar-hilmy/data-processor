@@ -5,17 +5,23 @@ import Home from "./components/Layouts/Home";
 const myRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Home />
   },
+  {
+    path: "/dataset/:idDataset",
+    element: "as"
+  }
 ], {
   future: {
-    v7_startTransition: true, // Opt-in to the future feature early
+    v7_startTransition: true,
   },
 });
 
-function App() {
+const App = () => {
   return (
-    <RouterProvider router={myRouter} />
+    <>
+      <RouterProvider router={myRouter} future={{ v7_startTransition: true }} />
+    </>
   );
 }
 

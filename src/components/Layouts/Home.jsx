@@ -3,20 +3,20 @@ import ButtonFile from '../Elements/Button/ButtonFile';
 import DataSaver from '../../Function/DatasetSaver';
 import React, { useState } from 'react';
 import Papa from 'papaparse';
-import getLocalStorageSize from '../../Function/LocalStorageSize';
+import getLocalStorageSize from '../../Function/IndexedDBSize';
 import LabelRemember from '../Elements/LabelRemember/Index';
 import DatasetDelete from '../../Function/DatasetDelete';
 import { useNavigate } from 'react-router-dom';
+import getIndexedDBSize from '../../Function/IndexedDBSize';
+import FadeInCustom from '../Animation/FadeElement';
 
 const Home = () => {
     const [touchTimeout, setTouchTimeout] = useState(null);
-    const [dataUpdated, setdataUpdated] = useState(false);
+    const [dataUpdated, setdataUpdated] = useState(false); // data at labelRemember
+    const [datasetName, setDatasetName] = useState('');
+    const [datasetId, setDatasetId] = useState('');
 
     const navigate = useNavigate();
-
-    const handleMoveTab = (page) => {
-        setActiveTab(page)
-    }
 
     // Hanlde Touch //Start
     const handleLongPress = (id) => {
@@ -36,7 +36,8 @@ const Home = () => {
             setTouchTimeout(null);
         }
     };
-    // Hanlde Touch //End
+    // Handle Touch
+    //End
 
     const handleDeleteDataset = (event, id) => {
         if (isDesktop()) {
@@ -48,17 +49,21 @@ const Home = () => {
     }
 
     const handleLabelRemember = (id, name) => {
-        setIdDataset(id);
-        setNameDataset(name);
-        setActiveTab('DatasetPreview')
+        setDatasetId(id)
+        setDatasetName(name)
+        setTimeout(() => {
+            navigate(`dataset/${id}`)
+        }, 100); // timeout: to avoid error querying data
     }
 
 
     const handleFileUpload = (event) => {
 
-        if (getLocalStorageSize() > 1000) {
-            console.log(`Storage: ${getLocalStorageSize()}`)
-        }
+        getIndexedDBSize().then((size) => {
+            console.log(`Database Size ${size} Mb`)
+        }).catch(error => {
+            console.error(error)
+        })
 
         const file = event.target.files[0];
         const fileName = file.name;
@@ -69,13 +74,11 @@ const Home = () => {
                 header: true, // Parsing dengan header untuk mengidentifikasi kolom
                 skipEmptyLines: true, // Melewati baris kosong
                 complete: (result) => {
-                    setData(result.data); // Menyimpan data yang diparsing
                     DataSaver(result.data, fileName).then((resultDataSaver) => {
-                        setIdDataset(resultDataSaver.id);
+                        setDatasetId(resultDataSaver.id);
                         navigate(`dataset/${resultDataSaver.id}`)
                     });
-                    setActiveTab('DatasetPreview')
-                    setNameDataset(fileName)
+                    setDatasetName(fileName)
                 },
             });
         } else {
@@ -97,7 +100,7 @@ const Home = () => {
 
     return (
         <>
-            <div className="w-full flex justify-center items-center">
+            <FadeInCustom className="w-full flex justify-center items-center">
                 <div className='flex flex-col w-4/5 h-screen items-center justify-center gap-4'>
                     <div className='flex flex-col w-full items-center gap-2'>
                         <h1 className="text-center text-3xl font-bold">Easy and Fast Dataset Processing</h1>
@@ -106,7 +109,7 @@ const Home = () => {
                     <ButtonFile onchange={handleFileUpload} accept=".csv" name="data" text="Upload CSV" />
                     <LabelRemember dataUpdated={dataUpdated} ontouchEnd={handleTouchEnd} ontouchStart={handleTouchStart} oncontextMenu={handleDeleteDataset} onclickBtn={handleLabelRemember} />
                 </div>
-            </div>
+            </FadeInCustom>
         </>
     )
 }

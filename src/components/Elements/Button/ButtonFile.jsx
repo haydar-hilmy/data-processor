@@ -16,7 +16,7 @@ const StyledWrapper = styled.div`
    font-size: inherit;
    border-radius: 500px;
    overflow: hidden;
-   background: #15803d;
+   background: #000;
    color: white;
   }
 
@@ -45,10 +45,10 @@ const StyledWrapper = styled.div`
 
   label.customBtn::before {
    content: "";
-   background: #000;
+   background: #15803d;
    width: 120%;
    left: -10%;
-   transform: skew(30deg);
+   transform: skew(10deg);
    transition: transform 0.3s cubic-bezier(0.3, 1, 0.8, 1);
   }
 
@@ -62,7 +62,7 @@ const ButtonFile = (props) => {
         !customButton ? (
             <>
                 <div>
-                    <input onChange={onchange} accept={accept} name={name} value={value} className={`hidden`} type="file" />
+                    <input id={name} onChange={onchange} accept={accept} name={name} value={value} className={`hidden`} type="file" />
                     <label className={`${variant} cursor-pointer bg-green-700 hover:bg-green-600 duration-150 text-white py-2 px-5 rounded-md flex gap-2 items-center`} htmlFor={name}>
                         <i className="fas fa-upload"></i>
                         {text}
@@ -72,7 +72,7 @@ const ButtonFile = (props) => {
         ) : (
             <>
                 <div>
-                    <input onChange={onchange} accept={accept} name={name} value={value} className="hidden" type="file" />
+                    <input id={name} onChange={onchange} accept={accept} name={name} value={value} className="hidden" type="file" />
                     <StyledWrapper>
                         <label className={`${variant} customBtn`} htmlFor={name}>
                             <span>

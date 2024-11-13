@@ -2,7 +2,7 @@ const ButtonLabelRemember = (props) => {
     const { text, variant, onclick, oncontextmenu, ontouchStart, ontouchEnd } = props
     return (
         <>
-            <button onTouchStart={ontouchStart} onTouchEnd={ontouchEnd} onContextMenu={oncontextmenu} onClick={onclick} className={`${variant != null ? variant : ""} bg-white px-5 py-2 rounded-md border-2 text-primary-0 border-green-400 duration-150 hover:border-green-300 hover:text-gray-500 cursor-pointer select-none`}>{text}</button>
+            <button onTouchStart={ontouchStart} onTouchEnd={ontouchEnd} onContextMenu={oncontextmenu} onClick={onclick} className={`${variant != null ? variant : ""} bg-gray-700 px-5 py-2 rounded-md text-primary-dark-0 duration-150 hover:opacity-60 cursor-pointer select-none`}>{text}</button>
         </>
     )
 }

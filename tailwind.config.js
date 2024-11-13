@@ -13,19 +13,18 @@ export default {
             },
             colors: {
                 primary: ['#30332E'],
-                "primary-dark": ['#F9F3FC']
+                "primary-dark": ['#E7E7E7']
             },
             backgroundColor: {
                 'primary': "#FFFBF3",
-                'primary-dark': "#0E0E0E"
+                'primary-dark': "#141414"
             }
         },
     },
     plugins: [
-        plugin(function({ addBase, theme }) {
+        plugin(function ({ addBase, theme }) {
             addBase({
                 'body': {
-                    background: 'linear-gradient(to bottom, #090909, #141414, #090909)',
                     backgroundColor: theme('backgroundColor.primary-dark'),
                     color: theme('colors.primary-dark'),
                 },

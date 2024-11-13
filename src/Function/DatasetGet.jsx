@@ -1,15 +1,42 @@
 const DataGet = (id = null) => {
-    let data = JSON.parse(localStorage.getItem('DF_DMINIM'))
-    if(id != null){
-        let dataObj = data.find(item => item.id == id)
-        if(dataObj){
-            return dataObj
-        } else {
-            return null
-        }
-    } else {
-        return data
-    }
-}
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("DF_DMINIM_DB", 1);
 
-export default DataGet
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains("datasets")) {
+                db.createObjectStore("datasets", { keyPath: "id" });
+            }
+        };
+
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction("datasets", "readonly");
+            const store = transaction.objectStore("datasets");
+
+            let data = [];
+            const getAllRequest = store.getAll();
+
+            getAllRequest.onsuccess = () => {
+                data = getAllRequest.result; 
+
+                if (id !== null) {
+                    const dataObj = data.find(item => item.id === id);
+                    resolve(dataObj || null); 
+                } else {
+                    resolve(data); 
+                }
+            };
+
+            getAllRequest.onerror = () => {
+                reject("Error fetching data from IndexedDB");
+            };
+        };
+
+        request.onerror = () => {
+            reject("Error opening IndexedDB");
+        };
+    });
+};
+
+export default DataGet;

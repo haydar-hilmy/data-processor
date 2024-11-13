@@ -3,7 +3,7 @@ import DataGet from "../../func/DatasetGet"
 import Dataset from '../oldComponents/Fragments/Dataset';
 import MainTitle from '../oldComponents/Elements/Texts/MainTitle';
 import MainButton from '../oldComponents/Elements/Button/MainButton';
-import TestingTs from '../oldComponents/Test/TestingTs';
+import TestingTs from '../../Test/TestingTsTest/TestingTs';
 import Input from '../oldComponents/Elements/LabeledInput/Input';
 import getColumnNamesDataset from '../../func/tensorflow/getColNameDataset';
 import Table from '../Fragments/Table';

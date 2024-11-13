@@ -1,6 +1,6 @@
 import * as tf from '@tensorflow/tfjs';
 import DataGet from '../DatasetGet';
-import Dataset from '../../components/Fragments/Dataset';
+import Dataset from '../../oldComponents/Fragments/Dataset';
 
 async function getColumnNamesDataset(id = null) {
     if (id != null) {

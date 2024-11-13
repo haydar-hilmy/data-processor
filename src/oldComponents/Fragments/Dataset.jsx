@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import DataGet from "../../func/DatasetGet"
+import DataGet from "../../Function/DatasetGet"
 import TableLoading from '../Elements/Loading/TableLoading/Index';
-import openDatabase from '../../func/Test/Test_IndexedDB/Test_Database';
-import addDataIndexedDB from '../../func/Test/Test_IndexedDB/Test_AddIndexedDB';
+import openDatabase from '../../Function/Test/Test_IndexedDB/Test_Database';
+import addDataIndexedDB from '../../Function/Test/Test_IndexedDB/Test_AddIndexedDB';
 
 const Dataset = ({ idDataset = null }) => {
 

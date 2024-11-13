@@ -1,14 +1,23 @@
 import { useEffect } from 'react';
-import ButtonFile from '../Elements/Button/ButtonFile';
-import DataSaver from '../../Function/DatasetSaver';
+import MainTitle from '../oldComponents/Elements/Texts/MainTitle';
+import LabeledInput from '../oldComponents/Elements/LabeledInput/Index';
+import ButtonFile from '../oldComponents/Elements/Button/ButtonFile';
+import DataSaver from '../../func/DatasetSaver';
 import React, { useState } from 'react';
+import Dataset from '../oldComponents/Fragments/Dataset';
 import Papa from 'papaparse';
-import getLocalStorageSize from '../../Function/LocalStorageSize';
-import LabelRemember from '../Elements/LabelRemember/Index';
-import DatasetDelete from '../../Function/DatasetDelete';
+import DatasetPreview from './DatasetPreview';
+import LabelRemember from '../oldComponents/Elements/LabelRemember/Index';
+import getLocalStorageSize from '../../func/LocalStorageSize';
+import DatasetDelete from '../../func/DatasetDelete';
 import { useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const Home = () => {
+    const [datacsv, setData] = useState([]);
+    const [activeTab, setActiveTab] = useState('main');
+    const [idDataset, setIdDataset] = useState(null);
+    const [nameDataset, setNameDataset] = useState(null);
     const [touchTimeout, setTouchTimeout] = useState(null);
     const [dataUpdated, setdataUpdated] = useState(false);
 
@@ -97,16 +106,22 @@ const Home = () => {
 
     return (
         <>
-            <div className="w-full flex justify-center items-center">
-                <div className='flex flex-col w-4/5 h-screen items-center justify-center gap-4'>
-                    <div className='flex flex-col w-full items-center gap-2'>
-                        <h1 className="text-center text-3xl font-bold">Easy and Fast Dataset Processing</h1>
-                        <h2 className="text-center text-base font-normal">Dive into data and discover what you can do in a flash!</h2>
+            {activeTab === 'main' && (
+                <div className="w-full flex justify-center items-center">
+                    <div className='flex flex-col w-4/5 h-screen items-center justify-center gap-4'>
+                        <div className='flex flex-col w-full items-center gap-2'>
+                            <MainTitle text="Easy and Fast Dataset Processing" className="text-center text-3xl font-bold" />
+                            <MainTitle text="Dive into data and discover what you can do in a flash!" className="text-center text-base font-normal" />
+                        </div>
+                        <ButtonFile onchange={handleFileUpload} accept=".csv" name="data" text="Input CSV" />
+                        <LabelRemember dataUpdated={dataUpdated} ontouchEnd={handleTouchEnd} ontouchStart={handleTouchStart} oncontextMenu={handleDeleteDataset} onclickBtn={handleLabelRemember} />
                     </div>
-                    <ButtonFile onchange={handleFileUpload} accept=".csv" name="data" text="Upload CSV" />
-                    <LabelRemember dataUpdated={dataUpdated} ontouchEnd={handleTouchEnd} ontouchStart={handleTouchStart} oncontextMenu={handleDeleteDataset} onclickBtn={handleLabelRemember} />
                 </div>
-            </div>
+            )}
+
+            {activeTab === 'DatasetPreview' && (
+                <DatasetPreview setCloseDataset={handleMoveTab} idDataset={idDataset} nameDataset={nameDataset} />
+            )}
         </>
     )
 }

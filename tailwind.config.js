@@ -25,7 +25,7 @@ export default {
         plugin(function({ addBase, theme }) {
             addBase({
                 'body': {
-                    background: 'linear-gradient(to bottom, #090909, #0E0E0E, #090909)',
+                    background: 'linear-gradient(to bottom, #090909, #141414, #090909)',
                     backgroundColor: theme('backgroundColor.primary-dark'),
                     color: theme('colors.primary-dark'),
                 },

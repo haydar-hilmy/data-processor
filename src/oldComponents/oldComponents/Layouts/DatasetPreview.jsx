@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import DataGet from "../../func/DatasetGet"
-import Dataset from '../Fragments/Dataset';
-import MainTitle from '../Elements/Texts/MainTitle';
-import MainButton from '../Elements/Button/MainButton';
-import TestingTs from '../Test/TestingTs';
-import Input from '../Elements/LabeledInput/Input';
+import Dataset from '../oldComponents/Fragments/Dataset';
+import MainTitle from '../oldComponents/Elements/Texts/MainTitle';
+import MainButton from '../oldComponents/Elements/Button/MainButton';
+import TestingTs from '../oldComponents/Test/TestingTs';
+import Input from '../oldComponents/Elements/LabeledInput/Input';
 import getColumnNamesDataset from '../../func/tensorflow/getColNameDataset';
 import Table from '../Fragments/Table';
 import { CloseOutlined } from '@mui/icons-material';
-import SubDiv from '../Elements/Div/SubDiv';
+import SubDiv from '../oldComponents/Elements/Div/SubDiv';
 import TableTitle from '../Elements/Texts/TableTitle';
-import DropDown from '../Elements/LabeledInput/DropDown';
+import DropDown from '../oldComponents/Elements/LabeledInput/DropDown';
 import findData from '../../func/tensorflow/findData';
 
 const DatasetPreview = (props) => {

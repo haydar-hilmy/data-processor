@@ -1,5 +1,3 @@
-import Input from "../LabeledInput/Input"
-import Label from "../LabeledInput/Label"
 import styled from 'styled-components';
 
 const StyledWrapper = styled.div`
@@ -59,13 +57,13 @@ const StyledWrapper = styled.div`
   }`;
 
 const ButtonFile = (props) => {
-    const { name, value, className, text = "Input File", accept, onchange, customButton = true } = props
+    const { name, value, variant, text = "Input File", accept, onchange, customButton = true } = props
     return (
         !customButton ? (
             <>
                 <div>
-                    <Input onchange={onchange} accept={accept} type="file" name={name} value={value} className={`${className} hidden`} />
-                    <label className="cursor-pointer bg-green-700 hover:bg-green-600 duration-150 text-white py-2 px-5 rounded-md flex gap-2 items-center" htmlFor={name}>
+                    <input onChange={onchange} accept={accept} name={name} value={value} className={`hidden`} type="file" />
+                    <label className={`${variant} cursor-pointer bg-green-700 hover:bg-green-600 duration-150 text-white py-2 px-5 rounded-md flex gap-2 items-center`} htmlFor={name}>
                         <i className="fas fa-upload"></i>
                         {text}
                     </label>
@@ -74,9 +72,9 @@ const ButtonFile = (props) => {
         ) : (
             <>
                 <div>
-                    <Input onchange={onchange} accept={accept} type="file" name={name} value={value} className={`${className} hidden`} />
+                    <input onChange={onchange} accept={accept} name={name} value={value} className="hidden" type="file" />
                     <StyledWrapper>
-                        <label className="customBtn" htmlFor={name}>
+                        <label className={`${variant} customBtn`} htmlFor={name}>
                             <span>
                                 <i className="fas fa-upload"></i>
                                 {text}

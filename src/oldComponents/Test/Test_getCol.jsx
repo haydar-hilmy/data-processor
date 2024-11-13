@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import getColumnNamesDataset from "../../func/tensorflow/getColNameDataset";
+import getColumnNamesDataset from "../../Function/TensorFlow/getColNameDataset";
 
 const Test_getCol = () => {
 

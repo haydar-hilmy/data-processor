@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './css/main.css';
-import Home from "./components/Layouts/Home";
+import Home from "./Components/Pages/Home";
+import Dashboard from "./Components/Pages/Dashboard";
 
 const myRouter = createBrowserRouter([
   {
@@ -8,8 +9,8 @@ const myRouter = createBrowserRouter([
     element: <Home />
   },
   {
-    path: "/dataset/:idDataset",
-    element: "as"
+    path: "/dashboard",
+    element: <Dashboard />
   }
 ], {
   future: {

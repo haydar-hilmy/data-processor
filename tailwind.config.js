@@ -17,7 +17,8 @@ export default {
             },
             backgroundColor: {
                 'primary': "#FFFBF3",
-                'primary-dark': "#141414"
+                'primary-dark': "#141414",
+                'secondary-dark': "#1E1E1E"
             }
         },
     },

@@ -1,4 +1,4 @@
-import DataGet from "../../../Function/DatasetGet"
+import { DataGet } from "../../../Function/DBDataset"
 import ButtonLabelRemember from "./Button"
 import { useEffect, useState } from "react"
 import styled from "styled-components"

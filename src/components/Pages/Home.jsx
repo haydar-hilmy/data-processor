@@ -1,14 +1,13 @@
 import { useEffect } from 'react';
 import ButtonFile from '../Elements/Button/ButtonFile';
-import DataSaver from '../../Function/DatasetSaver';
 import React, { useState } from 'react';
 import Papa from 'papaparse';
 import getLocalStorageSize from '../../Function/IndexedDBSize';
 import LabelRemember from '../Elements/LabelRemember/Index';
-import DatasetDelete from '../../Function/DatasetDelete';
 import { useNavigate } from 'react-router-dom';
 import getIndexedDBSize from '../../Function/IndexedDBSize';
 import FadeInCustom from '../Animation/FadeElement';
+import { DataSaver, DatasetDelete } from '../../Function/DBDataset';
 
 const Home = () => {
     const [touchTimeout, setTouchTimeout] = useState(null);

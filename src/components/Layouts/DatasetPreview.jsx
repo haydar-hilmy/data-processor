@@ -19,7 +19,7 @@ const DatasetPreview = (props) => {
     const [mainDataset, setMainDataset] = useState(null)
     const [columnNames, setColumnNames] = useState([])
     const [dataSearch, setDataSearch] = useState([])
-    const [isShowDataTesting, setShowDataTesting] = useState(true)
+    const [isShowDataTesting, setShowDataTesting] = useState(false)
     const [isShowDataSearch, setShowDataSearch] = useState(false)
     const [selectedValueSearch, setSelectedValueSearch] = useState(null)
 

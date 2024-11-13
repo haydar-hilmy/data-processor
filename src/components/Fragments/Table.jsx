@@ -49,7 +49,7 @@ const Table = (props) => {
                             )
                         ) : (
                             <tr>
-                                <td className="text-center py-2 font-medium text-primary-0" colSpan={thead.length || 1}>Failed to Load</td>
+                                <td className="text-center py-2 font-medium text-primary-0" colSpan={thead.length || 1}>No Data</td>
                             </tr>
                         )}
                     </tbody>

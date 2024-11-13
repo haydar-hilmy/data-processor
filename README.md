@@ -11,7 +11,7 @@ Aplikasi berbasis web kami dirancang untuk memudahkan analisis data dan penerapa
 
 ### DataMinim - Features
 - Display your dataset by uploading your CSV file, shown in table format.
-- Save your CSV data to localStorage for future access.
+- Save your CSV data to Local Database (IndexedDB) for future access.
 - Search for specific data within your dataset.
 - Calculate mode, mean, and average for selected columns.
 - Visualize data using charts and pie diagrams.

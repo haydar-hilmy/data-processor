@@ -10,6 +10,8 @@ import DatasetPreview from './DatasetPreview';
 import LabelRemember from '../Elements/LabelRemember/Index';
 import getLocalStorageSize from '../../func/LocalStorageSize';
 import DatasetDelete from '../../func/DatasetDelete';
+import { useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const Home = () => {
     const [datacsv, setData] = useState([]);
@@ -18,6 +20,8 @@ const Home = () => {
     const [nameDataset, setNameDataset] = useState(null);
     const [touchTimeout, setTouchTimeout] = useState(null);
     const [dataUpdated, setdataUpdated] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleMoveTab = (page) => {
         setActiveTab(page)
@@ -44,14 +48,14 @@ const Home = () => {
     // Hanlde Touch //End
 
     const handleDeleteDataset = (event, id) => {
-        if(isDesktop()){   
+        if (isDesktop()) {
             event.preventDefault()
             DatasetDelete(id).then(() => {
                 setdataUpdated(prev => !prev)
             })
         }
     }
-    
+
     const handleLabelRemember = (id, name) => {
         setIdDataset(id);
         setNameDataset(name);
@@ -60,6 +64,7 @@ const Home = () => {
 
 
     const handleFileUpload = (event) => {
+
         if (getLocalStorageSize() > 1000) {
             console.log(`Storage: ${getLocalStorageSize()}`)
         }
@@ -74,7 +79,10 @@ const Home = () => {
                 skipEmptyLines: true, // Melewati baris kosong
                 complete: (result) => {
                     setData(result.data); // Menyimpan data yang diparsing
-                    setIdDataset(DataSaver(result.data, fileName).id);
+                    DataSaver(result.data, fileName).then((resultDataSaver) => {
+                        setIdDataset(resultDataSaver.id);
+                        navigate(`dataset/${resultDataSaver.id}`)
+                    });
                     setActiveTab('DatasetPreview')
                     setNameDataset(fileName)
                 },
@@ -102,8 +110,8 @@ const Home = () => {
                 <div className="w-full flex justify-center items-center">
                     <div className='flex flex-col w-4/5 h-screen items-center justify-center gap-4'>
                         <div className='flex flex-col w-full items-center gap-2'>
-                            <MainTitle text="Easy and Fast Dataset Processing" className="text-center text-3xl font-bold text-primary-0" />
-                            <MainTitle text="Dive into data and discover what you can do in a flash!" className="text-center text-base font-normal text-primary-0" />
+                            <MainTitle text="Easy and Fast Dataset Processing" className="text-center text-3xl font-bold" />
+                            <MainTitle text="Dive into data and discover what you can do in a flash!" className="text-center text-base font-normal" />
                         </div>
                         <ButtonFile onchange={handleFileUpload} accept=".csv" name="data" text="Input CSV" />
                         <LabelRemember dataUpdated={dataUpdated} ontouchEnd={handleTouchEnd} ontouchStart={handleTouchStart} oncontextMenu={handleDeleteDataset} onclickBtn={handleLabelRemember} />

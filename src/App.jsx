@@ -15,6 +15,10 @@ const App = () => {
       element: <Home />,
     },
     {
+      path: "/dataset/:idDataset",
+      element: <DatasetPreview />,
+    },
+    {
       path: "/data",
       element: <DatasetPreview />
     },

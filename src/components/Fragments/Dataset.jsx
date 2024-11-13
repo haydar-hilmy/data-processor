@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import DataGet from "../../func/DatasetGet"
+import TableLoading from '../Elements/Loading/TableLoading/Index';
+import openDatabase from '../../func/Test/Test_IndexedDB/Test_Database';
+import addDataIndexedDB from '../../func/Test/Test_IndexedDB/Test_AddIndexedDB';
 
 const Dataset = ({ idDataset = null }) => {
 
     const tableWrapperRef = useRef(null)
     const [dataset, setDataset] = useState([])
     const [maxCount, setMaxCount] = useState(20)
+    const [isShowLoadingDataset, setShowLoadingDataset] = useState(true)
 
     const handleScrollDataset = () => {
         if (tableWrapperRef.current) {
@@ -20,21 +24,30 @@ const Dataset = ({ idDataset = null }) => {
     }
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            let data = DataGet(idDataset) || [];
+        const fetchData = async () => {
+            openDatabase()
+            setShowLoadingDataset(true)
+            
+            let data = await DataGet(idDataset) || [];
             if (Array.isArray(data)) {
-                setDataset(data.length > 0 ? data[data.length - 1].data : []); // jika data array
+                setDataset(data.length > 0 ? data[data.length - 1].data : []);
             } else {
-                setDataset(data ? data['data'] : []); // jika data adalah objek
+                setDataset(data ? data['data'] : []); 
             }
-        }, 1000);
+
+            setShowLoadingDataset(false)
+        };
+    
+        fetchData();
         
-        return () => clearTimeout(timer);
-    }, [idDataset]);
+        return () => {};
+    }, [idDataset]); 
+    
 
     return (
         <>
             <div ref={tableWrapperRef} onScroll={handleScrollDataset} className="table-wrap border-2 rounded-md">
+                <TableLoading isShow={isShowLoadingDataset} />
                 {dataset.length > 0 && (
                     <table className="table-auto border-collapse border border-gray-300 w-full">
                         <thead>

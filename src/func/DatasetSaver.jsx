@@ -1,26 +1,44 @@
-const DataSaver = (data, fileName) => { // data must be {}
-    let dataString, idDataset = crypto.randomUUID();
-    if(localStorage.getItem('DF_DMINIM') != null){
-        dataString = {
-            id: idDataset,
-            name: fileName,
-            data: data
-        }
-        let getDataObj = JSON.parse(localStorage.getItem('DF_DMINIM'))
-        getDataObj.push(dataString)
-        localStorage.setItem('DF_DMINIM', JSON.stringify(getDataObj))
-    } else {
-        dataString = [{
-            id: idDataset,
-            name: fileName,
-            data: data
-        }]
-        localStorage.setItem('DF_DMINIM', JSON.stringify(dataString))
-    }
-    return {
-        id: idDataset,
-        name: fileName
-    }
-}
+const DataSaver = async (data, fileName) => {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("DF_DMINIM_DB", 1);
 
-export default DataSaver
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains("datasets")) {
+                db.createObjectStore("datasets", { keyPath: "id" });
+            }
+        };
+
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction("datasets", "readwrite");
+            const store = transaction.objectStore("datasets");
+
+            const idDataset = crypto.randomUUID();
+            const dataString = {
+                id: idDataset,
+                name: fileName,
+                data: data
+            };
+
+            const addRequest = store.add(dataString);
+
+            addRequest.onsuccess = () => {
+                resolve({
+                    id: idDataset,
+                    name: fileName
+                });
+            };
+
+            addRequest.onerror = (error) => {
+                reject("Failed to save data: " + error);
+            };
+        };
+
+        request.onerror = (error) => {
+            reject("IndexedDB error: " + error);
+        };
+    });
+};
+
+export default DataSaver;

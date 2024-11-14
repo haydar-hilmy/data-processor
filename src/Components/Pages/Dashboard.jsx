@@ -26,7 +26,7 @@ const Dashboard = () => {
     return (
         <MainLayout title="Overview Dashboard" tab="dashboard">
             <Header headerText={`Welcome, ${UserData.name}`}>
-                <ButtonFile text="Upload" name="file" accept=".csv" customButton={false} />
+                <ButtonFile text="Upload" name="file" accept=".csv, .json" customButton={false} />
                 <ButtonMain variant="bg-blue-800"><Analytics/> Analyze</ButtonMain>
             </Header>
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Modi quisquam rerum quam perferendis sit exercitationem corrupti doloribus nulla numquam similique, nisi, nobis, maiores est aliquam debitis quo autem impedit doloremque?

@@ -4,14 +4,21 @@ import { IconButton } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import React, { useRef, useState, useEffect } from 'react';
 import UseredPhoto from "../../Elements/UserProfile/UseredPhoto";
+import { useNavigate } from "react-router-dom";
+
 
 const Navbar = (props) => {
     const { variant = "", activeNav = "" } = props
-
+    
     const [openNav, setOpenNav] = useState(false);
     const BackModalRef = useRef(null);
     const StyledNavRef = useRef(null);
 
+    const navigate = useNavigate()
+    const handleTabClick = (tab) => {
+        navigate(`/${tab}`)
+    }
+    
     const toggleNav = () => {
         setOpenNav(!openNav);
     };

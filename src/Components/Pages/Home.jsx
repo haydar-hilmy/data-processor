@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Papa from 'papaparse';
 import LabelRemember from '../Elements/LabelRemember/Index';
 import { useNavigate } from 'react-router-dom';
-import getIndexedDBSize from '../../Function/IndexedDBSize';
+import { getIndexedDBSize } from '../../Function/IndexedDBSize';
 import FadeInCustom from '../Animation/FadeElement';
 import { DataSaver, DatasetDelete } from '../../Function/DBDataset';
 
@@ -111,7 +111,7 @@ const Home = () => {
                         <h1 className="text-center text-3xl font-bold">Easy and Fast Dataset Processing</h1>
                         <h2 className="text-center text-base font-normal">Dive into data and discover what you can do in a flash!</h2>
                     </div>
-                    <ButtonFile onchange={handleFileUpload} accept=".csv" name="data" text="Upload CSV" />
+                    <ButtonFile onchange={handleFileUpload} accept=".csv, .json" name="data" text="Upload Dataset" />
                     <LabelRemember dataUpdated={dataUpdated} ontouchEnd={handleTouchEnd} ontouchStart={handleTouchStart} oncontextMenu={handleDeleteDataset} onclickBtn={handleLabelRemember} />
                 </div>
             </FadeInCustom>

@@ -14,11 +14,15 @@ const DataSaver = async (data, fileName) => {
             const transaction = db.transaction("datasets", "readwrite");
             const store = transaction.objectStore("datasets");
 
+            const currentDate = new Date()
+            const formatDate = `${currentDate.toLocaleDateString('id-ID')} ${currentDate.toLocaleTimeString('id-ID')}`
+
             const idDataset = crypto.randomUUID();
             const dataString = {
                 id: idDataset,
                 name: fileName,
-                data: data
+                data: data,
+                date: formatDate
             };
 
             const addRequest = store.add(dataString);
@@ -26,7 +30,9 @@ const DataSaver = async (data, fileName) => {
             addRequest.onsuccess = () => {
                 resolve({
                     id: idDataset,
-                    name: fileName
+                    name: fileName,
+                    ata: data,
+                    date: formatDate
                 });
             };
 
@@ -61,13 +67,13 @@ const DataGet = (id = null) => {
             const getAllRequest = store.getAll();
 
             getAllRequest.onsuccess = () => {
-                data = getAllRequest.result; 
+                data = getAllRequest.result;
 
                 if (id !== null) {
                     const dataObj = data.find(item => item.id === id);
-                    resolve(dataObj || null); 
+                    resolve(dataObj || null);
                 } else {
-                    resolve(data); 
+                    resolve(data);
                 }
             };
 
@@ -84,7 +90,7 @@ const DataGet = (id = null) => {
 
 
 async function DatasetDelete(id) {
-    if (confirm("Do you want to delete this dataset?")) {
+    if (confirm(`Do you want to delete this dataset?\n${id}`)) {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open("DF_DMINIM_DB", 1);
 
@@ -110,5 +116,6 @@ async function DatasetDelete(id) {
         });
     }
 }
+
 
 export { DataSaver, DataGet, DatasetDelete };

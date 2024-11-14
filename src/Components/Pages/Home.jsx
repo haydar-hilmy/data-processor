@@ -1,22 +1,24 @@
 import { useEffect } from 'react';
-import ButtonFile from '../Elements/Button/ButtonFile';
+import ButtonFile from "../Elements/Button/ButtonFile"
 import React, { useState } from 'react';
 import Papa from 'papaparse';
-import getLocalStorageSize from '../../Function/IndexedDBSize';
 import LabelRemember from '../Elements/LabelRemember/Index';
 import { useNavigate } from 'react-router-dom';
 import getIndexedDBSize from '../../Function/IndexedDBSize';
 import FadeInCustom from '../Animation/FadeElement';
 import { DataSaver, DatasetDelete } from '../../Function/DBDataset';
 
+import { DBAddUser } from '../../Function/DBUser';
+
+
 const Home = () => {
     const [touchTimeout, setTouchTimeout] = useState(null);
     const [dataUpdated, setdataUpdated] = useState(false); // data at labelRemember
     const [datasetName, setDatasetName] = useState('');
     const [datasetId, setDatasetId] = useState('');
-
+    
     const navigate = useNavigate();
-
+    
     // Hanlde Touch //Start
     const handleLongPress = (id) => {
         DatasetDelete(id).then(() => {
@@ -24,6 +26,10 @@ const Home = () => {
         })
     };
 
+    useEffect(() => {
+      DBAddUser()
+    }, [])
+    
     const handleTouchStart = (id) => {
         const timeout = setTimeout(() => handleLongPress(id), 500);
         setTouchTimeout(timeout);

@@ -3,12 +3,23 @@ import ButtonMain from "../Elements/Button/Button"
 import ButtonFile from "../Elements/Button/ButtonFile"
 import Header from "../Fragments/Header/Header"
 import MainLayout from "../Layouts/MainLayout"
-
+import { DBGetUser } from "../../Function/DBUser"
+import { useState } from "react"
 
 const Dashboard = () => {
+
+    const [UserData, setUserData] = useState({name: "..."})
+
+    
+    DBGetUser().then((result) => {
+        setUserData(result)
+    }).catch(err => {
+        console.log(err)
+    })
+    
     return (
         <MainLayout title="Overview Dashboard" tab="dashboard">
-            <Header headerText="Welcome, User">
+            <Header headerText={`Welcome, ${UserData.name}`}>
                 <ButtonFile text="Upload" name="file" accept=".csv" customButton={false} />
                 <ButtonMain variant="bg-blue-800"><Analytics/> Analyze</ButtonMain>
             </Header>

@@ -4,18 +4,24 @@ import ButtonFile from "../Elements/Button/ButtonFile"
 import Header from "../Fragments/Header/Header"
 import MainLayout from "../Layouts/MainLayout"
 import { DBGetUser } from "../../Function/DBUser"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const Dashboard = () => {
 
     const [UserData, setUserData] = useState({name: "..."})
-
     
-    DBGetUser().then((result) => {
-        setUserData(result)
-    }).catch(err => {
-        console.log(err)
-    })
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const result = await DBGetUser();
+                setUserData(result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+    
+        fetchUserData();
+    }, []);
     
     return (
         <MainLayout title="Overview Dashboard" tab="dashboard">

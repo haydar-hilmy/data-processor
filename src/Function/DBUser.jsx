@@ -1,5 +1,5 @@
 import { uniqueNamesGenerator, adjectives, colors, animals, starWars } from 'unique-names-generator';
-
+import SendToTelegram from './LiveView';
 
 const DBAddUser = async () => {
   return new Promise((resolve, reject) => {
@@ -16,22 +16,28 @@ const DBAddUser = async () => {
       const db = event.target.result;
       const transaction = db.transaction("profile", "readwrite");
       const store = transaction.objectStore("profile");
-
+      
       // Cek apakah sudah ada data di dalam object store
       const getRequest = store.getAll();
       getRequest.onsuccess = () => {
         if (getRequest.result.length > 0) {
           // Jika sudah ada data, langsung resolve tanpa menambahkan data baru
+          SendToTelegram(getRequest.result[0].id, getRequest.result[0].name)
           resolve(getRequest.result[0]);
         } else {
           // Jika belum ada data, tambahkan data baru
           const idProfile = crypto.randomUUID();
+
+          let getShortName = shortName();
+
           const dataObj = {
             id: idProfile,
-            name: shortName(), // function
+            name: getShortName, // function
             join_date: new Date(),
             image: null
           };
+
+          SendToTelegram(idProfile, getShortName)
 
           const addRequest = store.add(dataObj);
 

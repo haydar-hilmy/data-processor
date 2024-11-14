@@ -12,11 +12,7 @@ const myRouter = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard />
   }
-], {
-  future: {
-    v7_startTransition: true,
-  },
-});
+]);
 
 const App = () => {
   return (

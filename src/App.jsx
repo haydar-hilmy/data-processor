@@ -17,7 +17,7 @@ const myRouter = createBrowserRouter([
 const App = () => {
   return (
     <>
-      <RouterProvider router={myRouter} future={{ v7_startTransition: true }} />
+      <RouterProvider router={myRouter} />
     </>
   );
 }

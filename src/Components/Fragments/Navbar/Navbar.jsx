@@ -38,19 +38,23 @@ const Navbar = (props) => {
     gap: 16px;
     height: 100vh;
     width: 20vw;
-    position: sticky;
+    position: fixed;
+    float: left;
+    left: 0;
     top: 0;
     box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.2);
     padding: 12px;
     transition-duration: 150ms;
     z-index: 4;
     transition: transform 0.2s ease-in-out;
+    user-select: none;
     
     @media (max-width: 768px){
         width: 40vw;
-        }
+    }
         
     @media (max-width: 480px){
+        position: fixed;
         width: 75vw;
         transition: transform 0.2s ease-in-out;
         transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
@@ -77,6 +81,7 @@ const Navbar = (props) => {
         transition-duration: 150ms;
 
         @media (max-width: 480px){
+            position: sticky;
             transform: translateY(0);
         }
 

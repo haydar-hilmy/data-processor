@@ -1,3 +1,4 @@
+import { UploadFile } from '@mui/icons-material';
 import styled from 'styled-components';
 
 const StyledWrapper = styled.div`
@@ -45,7 +46,7 @@ const StyledWrapper = styled.div`
 
   label.customBtn::before {
    content: "";
-   background: #15803d;
+   background: #1d4ed8; /* main blue (bg-blue-700) */
    width: 120%;
    left: -10%;
    transform: skew(10deg);
@@ -63,8 +64,8 @@ const ButtonFile = (props) => {
             <>
                 <div>
                     <input id={name} onChange={onchange} accept={accept} name={name} value={value} className={`hidden`} type="file" />
-                    <label style={{ minWidth: "fit-content" }} className={`${variant} cursor-pointer bg-green-700 hover:opacity-80 duration-150 text-white py-2 px-3 rounded-md flex gap-2 items-center`} htmlFor={name}>
-                        <i className="fas fa-upload"></i>
+                    <label style={{ minWidth: "fit-content" }} className={`${variant} cursor-pointer border border-transparent bg-blue-700 hover:opacity-80 duration-150 text-white py-2 px-3 rounded-md flex gap-2 items-center`} htmlFor={name}>
+                        <UploadFile />
                         {text}
                     </label>
                 </div>
@@ -76,7 +77,7 @@ const ButtonFile = (props) => {
                     <StyledWrapper>
                         <label className={`${variant} customBtn`} htmlFor={name}>
                             <span>
-                                <i className="fas fa-upload"></i>
+                                <UploadFile />
                                 {text}
                             </span>
                         </label>

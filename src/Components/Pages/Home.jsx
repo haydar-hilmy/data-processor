@@ -16,9 +16,9 @@ const Home = () => {
     const [dataUpdated, setdataUpdated] = useState(false); // data at labelRemember
     const [datasetName, setDatasetName] = useState('');
     const [datasetId, setDatasetId] = useState('');
-    
+
     const navigate = useNavigate();
-    
+
     // Hanlde Touch //Start
     const handleLongPress = (id) => {
         DatasetDelete(id).then(() => {
@@ -27,9 +27,9 @@ const Home = () => {
     };
 
     useEffect(() => {
-      DBAddUser()
+        DBAddUser()
     }, [])
-    
+
     const handleTouchStart = (id) => {
         const timeout = setTimeout(() => handleLongPress(id), 500);
         setTouchTimeout(timeout);
@@ -64,14 +64,15 @@ const Home = () => {
 
     const handleFileUpload = (event) => {
 
-        getIndexedDBSize().then((size) => {
-            console.log(`Database Size ${size} Mb`)
-        }).catch(error => {
-            console.error(error)
-        })
-
-        const file = event.target.files[0];
-        const fileName = file.name;
+        const file = event.target.files[0],
+            fileName = file.name,
+            fileSize = file.size,
+            fileType = file.type;
+        const fileInfo = {
+            fileName: fileName,
+            fileSize: fileSize,
+            fileType: fileType
+        }
 
 
         if (file && file.type === "text/csv") {
@@ -79,16 +80,36 @@ const Home = () => {
                 header: true, // Parsing dengan header untuk mengidentifikasi kolom
                 skipEmptyLines: true, // Melewati baris kosong
                 complete: (result) => {
-                    DataSaver(result.data, fileName).then((resultDataSaver) => {
+                    DataSaver(result.data, fileInfo).then((resultDataSaver) => {
                         setDatasetId(resultDataSaver.id);
                         navigate(`dataset/${resultDataSaver.id}`)
                     });
                     setDatasetName(fileName)
                 },
             });
+        } else if (file.type === "application/json") {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const jsonData = JSON.parse(e.target.result);
+                    DataSaver(jsonData, fileInfo).then((resultDataSaver) => {
+                        if (navigate != false) {
+                            navigate(`/dataset/${resultDataSaver.id}`);
+                        }
+                        return resultDataSaver;
+                    }).catch(err => {
+                        console.error("Error during save dataset: ", err);
+                        return false;
+                    });
+                } catch (err) {
+                    console.error("Error parsing JSON file: ", err);
+                }
+            };
+            reader.readAsText(file); // Membaca file JSON sebagai teks
         } else {
-            alert("Please upload a valid CSV file.");
+            alert("Please upload a valid CSV or JSON file.");
         }
+
 
         event.target.value = null;
     };

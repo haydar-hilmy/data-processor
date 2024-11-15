@@ -1,4 +1,4 @@
-const DataSaver = async (data, fileName) => {
+const DataSaver = async (data, fileInfo) => {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open("DF_DMINIM_DB", 1);
 
@@ -20,8 +20,10 @@ const DataSaver = async (data, fileName) => {
             const idDataset = crypto.randomUUID();
             const dataString = {
                 id: idDataset,
-                name: fileName,
+                name: fileInfo.fileName,
                 data: data,
+                size: fileInfo.fileSize,
+                type: fileInfo.fileType,
                 date: formatDate
             };
 
@@ -30,8 +32,10 @@ const DataSaver = async (data, fileName) => {
             addRequest.onsuccess = () => {
                 resolve({
                     id: idDataset,
-                    name: fileName,
-                    ata: data,
+                    name: fileInfo.fileName,
+                    data: data,
+                    size: fileInfo.fileSize,
+                    type: fileInfo.fileType,
                     date: formatDate
                 });
             };
@@ -47,7 +51,7 @@ const DataSaver = async (data, fileName) => {
     });
 };
 
-const DataGet = (id = null) => {
+const DataGet = (id = null, fileName = '') => {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open("DF_DMINIM_DB", 1);
 
@@ -72,6 +76,11 @@ const DataGet = (id = null) => {
                 if (id !== null) {
                     const dataObj = data.find(item => item.id === id);
                     resolve(dataObj || null);
+                } else if (fileName !== '') {
+                    const filteredData = data.filter(item =>
+                        item.name.toLowerCase().includes(fileName.toLowerCase().trim())
+                    );
+                    resolve(filteredData.length > 0 ? filteredData : null);
                 } else {
                     resolve(data);
                 }

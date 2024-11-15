@@ -18,7 +18,14 @@ export default {
             backgroundColor: {
                 'primary': "#FFFBF3",
                 'primary-dark': "#141414",
-                'secondary-dark': "#1E1E1E"
+                'secondary-dark': "#1E1E1E",
+                'btn-primary': "#1d4ed8", // bg-blue-700
+                'btn-secondary': "#1e1e1e",
+                'btn-disabled': "#1e1e1e9c",
+                'btn-special': '#581c87', // purple
+                'btn-success': '#156233',
+                'btn-error': '#e74c3c',
+                'btn-warning': '#b91c1c' // red
             }
         },
     },

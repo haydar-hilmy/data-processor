@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const Navbar = (props) => {
-    const { variant = "", activeNav = "" } = props
+    const { variant = "", activeNav = "", username = "User", userphoto = null } = props
     
     const [openNav, setOpenNav] = useState(false);
     const BackModalRef = useRef(null);
@@ -58,13 +58,13 @@ const Navbar = (props) => {
     
     @media (max-width: 768px){
         width: 40vw;
+        position: fixed;
+        transition: transform 0.2s ease-in-out;
+        transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
     }
         
     @media (max-width: 480px){
-        position: fixed;
         width: 75vw;
-        transition: transform 0.2s ease-in-out;
-        transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
     }
 
     @media (max-width: 280px){
@@ -83,11 +83,11 @@ const Navbar = (props) => {
         box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.2);
         position: fixed;
         top: 0;
-        z-index: 2;
+        z-index: 10;
         transform: translateY(-100%);
         transition-duration: 150ms;
 
-        @media (max-width: 480px){
+        @media (max-width: 768px){
             position: sticky;
             transform: translateY(0);
         }
@@ -190,7 +190,7 @@ const Navbar = (props) => {
                     </span>
                 </StyledListNav>
                 <div className="flex items-end h-full">
-                    <UseredPhoto />
+                    <UseredPhoto username={username} userphoto={userphoto} />
                 </div>
             </StyledNav>
         </>

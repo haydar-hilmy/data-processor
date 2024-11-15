@@ -5,6 +5,13 @@ import styled from "styled-components"
 
 const LoadingLabelBox = styled.div`
 animation: pulse 0.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+@keyframes pulse {
+    50% {
+        opacity: .5;
+    }
+}
+
 `
 
 const LabelRemember = (props) => {

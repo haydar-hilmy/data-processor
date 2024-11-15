@@ -1,7 +1,10 @@
 import styled from "styled-components"
+import { getInitial } from '../../../Function/GetInitial'
 
 const UseredPhoto = (props) => {
-    const { initialName = 'A', Username = 'User' } = props
+    const { username = 'User', userphoto = null } = props
+
+
 
     const PhotoUser = styled.div`
     display: flex;
@@ -18,8 +21,8 @@ const UseredPhoto = (props) => {
 
     return (
         <div className="flex flex-row gap-2 items-center py-2 px-2 cursor-pointer w-full duration-150 hover:bg-primary-dark rounded-md">
-            <PhotoUser>{initialName}</PhotoUser>
-            <span style={{ letterSpacing: '0.05rem' }} className="text-lg font-bold">{Username}</span>
+            <PhotoUser>{getInitial(username, true)}</PhotoUser>
+            <span style={{ letterSpacing: '0.05rem' }} className="text-lg font-bold">{username}</span>
         </div>
     )
 }

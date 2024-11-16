@@ -141,6 +141,7 @@ const UpdateUser = async (userData = { id, username, email, image: null }) => {
             existUser.name = userData.username;
             existUser.email = userData.email;
             existUser.image = imageData;
+            console.log(imageData)
 
             // Lakukan operasi put di transaksi yang baru
             const updateRequest = newStore.put(existUser);

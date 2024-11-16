@@ -45,7 +45,7 @@ const DatasetTab = () => {
 
 
     return (
-        <MainLayout title="Manage Your Dataset" tab="dataset">
+        <>
             <Header headerText={`Datasets`}>
                 <CircleLoading isLoading={isLoading} />
                 <ButtonFile
@@ -93,7 +93,7 @@ const DatasetTab = () => {
 
 
             </div>
-        </MainLayout>
+        </>
     )
 }
 

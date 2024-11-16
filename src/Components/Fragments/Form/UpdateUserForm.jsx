@@ -71,7 +71,7 @@ const UpdateUserForm = () => {
         <>
             <form onSubmit={handleSubmit}>
                 <div className="mt-4">
-                    <CirclePhoto userphoto={imagePreview} />
+                    <CirclePhoto username={username} userphoto={imagePreview} />
                     <LabeledInputWrap variant="mt-4">
                         <ButtonFile accept=".jpg, .png" onchange={(e) => setImage(e.target.files[0])} name="photo" text="Add Profile Photo" info="Accepted (max:5MB): JPG, PNG" customButton={false} />
                     </LabeledInputWrap>

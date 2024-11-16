@@ -17,7 +17,7 @@ const SettingsTab = () => {
 
 
     return (
-        <MainLayout title="Application Settings" tab="settings">
+        <>
             <Header headerText={`Settings`}></Header>
 
             <SubNav>
@@ -36,7 +36,7 @@ const SettingsTab = () => {
                     "This is Theme Tab"
                 ) : ("")
             }
-        </MainLayout>
+        </>
     )
 
 }

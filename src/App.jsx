@@ -5,6 +5,30 @@ import Dashboard from "./Components/Pages/Dashboard";
 import DatasetTab from "./Components/Pages/DatasetTab";
 import { useEffect } from "react";
 import SettingsTab from "./Components/Pages/Settings";
+import MainLayout from "./Components/Layouts/MainLayout";
+
+// const myRouter = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <Home />
+//   },
+//   {
+//     path: "/dashboard",
+//     element: <Dashboard />
+//   },
+//   {
+//     path: "/dataset",
+//     element: <DatasetTab />
+//   },
+//   {
+//     path: "/dataset/:iddataset",
+//     element: <DatasetTab />
+//   },
+//   {
+//     path: "/settings",
+//     element: <SettingsTab />
+//   }
+// ]);
 
 const myRouter = createBrowserRouter([
   {
@@ -12,20 +36,30 @@ const myRouter = createBrowserRouter([
     element: <Home />
   },
   {
-    path: "/dashboard",
-    element: <Dashboard />
-  },
-  {
-    path: "/dataset",
-    element: <DatasetTab />
-  },
-  {
-    path: "/dataset/:iddataset",
-    element: <DatasetTab />
-  },
-  {
-    path: "/settings",
-    element: <SettingsTab />
+    path: "/",
+    element: <MainLayout />,
+    children: [
+      { 
+        path: '/dashboard',
+        element: <Dashboard />,
+        title: "Overview Dashboard"
+      },
+      { 
+        path: '/dataset',
+        element: <DatasetTab />,
+        title: "Manage Your Dataset"
+      },
+      {
+        path: '/dataset/:iddataset',
+        element: <DatasetTab />
+      },
+      {
+        path: '/settings',
+        element: <SettingsTab />,
+        title: "Application Settings"
+      }
+      // Tambahkan halaman lainnya yang menggunakan MainLayout
+    ],
   }
 ]);
 
@@ -48,4 +82,4 @@ const App = () => {
   );
 }
 
-export default App;
+export { App, myRouter };

@@ -24,7 +24,7 @@ const Dashboard = () => {
     }, []);
     
     return (
-        <MainLayout title="Overview Dashboard" tab="dashboard">
+        <>
             <Header headerText={`Welcome, ${UserData.name}`}>
                 <ButtonFile text="Upload" name="file" accept=".csv, .json" customButton={false} />
                 <ButtonMain variant="bg-btn-special"><Analytics/> Analyze</ButtonMain>
@@ -51,7 +51,7 @@ const Dashboard = () => {
             Quis rerum voluptatem natus. Voluptatem culpa assumenda harum soluta impedit repudiandae asperiores tenetur cupiditate molestias, libero facilis porro aperiam vitae, cumque at reprehenderit quia enim sapiente quae nulla iusto. Quaerat?
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi ratione, amet tenetur perspiciatis neque repellat mollitia saepe enim soluta sapiente eaque earum atque incidunt a commodi expedita possimus iusto ipsum?
             Sequi ad repellat similique magnam dolorum impedit, optio temporibus ratione nulla incidunt expedita excepturi pariatur iste molestias? Odit quia officia incidunt. Perferendis, vero tempora rem repellat dignissimos nobis voluptas optio!
-        </MainLayout>
+        </>
     )
 }
 

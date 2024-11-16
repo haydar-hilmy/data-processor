@@ -164,27 +164,27 @@ const Navbar = (props) => {
                 </StyledTitleNav>
                 <StyledListNav>
                     <span
-                        className={activeNav === 'dashboard' ? 'activeNav' : ''}
+                        className={activeNav === '/dashboard' ? 'activeNav' : ''}
                         onClick={() => handleTabClick('dashboard')}>
                         <DashboardIcon /> Dashboard
                     </span>
                     <span
-                        className={activeNav === 'dataset' ? 'activeNav' : ''}
+                        className={activeNav === '/dataset' ? 'activeNav' : ''}
                         onClick={() => handleTabClick('dataset')}>
                         <DatasetIcon /> Dataset
                     </span>
                     <span
-                        className={activeNav === 'analyze' ? 'activeNav' : ''}
+                        className={activeNav === '/analyze' ? 'activeNav' : ''}
                         onClick={() => handleTabClick('analyze')}>
                         <AnalyzeIcon /> Analyze
                     </span>
                     <span
-                        className={activeNav === 'settings' ? 'activeNav' : ''}
+                        className={activeNav === '/settings' ? 'activeNav' : ''}
                         onClick={() => handleTabClick('settings')}>
                         <SettingsIcon /> Settings
                     </span>
                     <span
-                        className={activeNav === 'help' ? 'activeNav' : ''}
+                        className={activeNav === '/help' ? 'activeNav' : ''}
                         onClick={() => handleTabClick('help')}>
                         <HelpIcon /> Help
                     </span>

@@ -106,22 +106,25 @@ const DBGetUser = async () => {
 
 
 
-const UpdateUser = async (userData = { id, username, email, image: null }) => {
+const UpdateUser = async (userData = { id, username, email, image: null }, isDeleteImage = false) => {
   return new Promise((resolve, reject) => {
+    if(isDeleteImage){
+      userData.image = null // even image is not null, will be null if isDeleteImage = true
+    }
     const request = indexedDB.open("USER_DMINIM_DB", 1);
-
+    
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
       if (!db.objectStoreNames.contains("profile")) {
         db.createObjectStore("profile", { keyPath: "id" });
       }
     };
-
+    
     request.onsuccess = (event) => {
       const db = event.target.result;
       const transaction = db.transaction("profile", "readwrite");
       const store = transaction.objectStore("profile");
-
+      
       const getRequestById = store.get(userData.id);
 
       getRequestById.onsuccess = () => {
@@ -132,7 +135,7 @@ const UpdateUser = async (userData = { id, username, email, image: null }) => {
           const reader = new FileReader();
           reader.onload = () => {
             const imageData = reader.result;
-
+            
             // Setelah file dibaca, kita mulai transaksi baru
             const newTransaction = db.transaction("profile", "readwrite");
             const newStore = newTransaction.objectStore("profile");
@@ -141,7 +144,6 @@ const UpdateUser = async (userData = { id, username, email, image: null }) => {
             existUser.name = userData.username;
             existUser.email = userData.email;
             existUser.image = imageData;
-            console.log(imageData)
 
             // Lakukan operasi put di transaksi yang baru
             const updateRequest = newStore.put(existUser);
@@ -163,6 +165,10 @@ const UpdateUser = async (userData = { id, username, email, image: null }) => {
           // Update user data
           existUser.name = userData.username;
           existUser.email = userData.email;
+
+          if(isDeleteImage){
+            existUser.image = null
+          }
 
           // Lakukan operasi put di transaksi yang baru
           const updateRequest = newStore.put(existUser);

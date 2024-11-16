@@ -25,6 +25,7 @@ margin-left: 20vw;
 const MainLayout = (props) => {
     const location = useLocation(); // Mendapatkan lokasi path saat ini
     const [title, setTitle] = useState("Default Title");
+    const [pathname, setPathname] = useState('')
 
     useEffect(() => {
         // Mencari route yang cocok berdasarkan pathname menggunakan matchPath
@@ -34,6 +35,7 @@ const MainLayout = (props) => {
 
         // Set title dari route yang cocok
         setTitle(route?.title || "Default Title");
+        setPathname(route?.path || '')
     }, [location]);   // Re-run useEffect setiap location berubah
 
 
@@ -58,7 +60,7 @@ const MainLayout = (props) => {
 
     return (
         <>
-            <Navbar email={UserData.email} username={UserData.name} userphoto={UserData.image} activeNav={title} />
+            <Navbar email={UserData.email} username={UserData.name} userphoto={UserData.image} activeNav={pathname} />
             <StyledMain>
                 <Outlet />
             </StyledMain>

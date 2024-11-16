@@ -18,6 +18,10 @@ const UpdateUserForm = () => {
     const [image, setImage] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
     const [isDeleteImage, setDeleteImage] = useState(false)
+    const [error, setError] = useState('');
+
+    const maxSize = 2 * 1024 * 1024;
+    const validTypes = ['image/jpeg', 'image/png'];
 
 
     useEffect(() => {
@@ -37,9 +41,34 @@ const UpdateUserForm = () => {
         fetchUserData();
     }, []);
 
+    const handleImagePreview = (event) => {
+        const file = event.target.files[0] // Mendapatkan file pertama yang dipilih
+        setImage(event.target.files[0])
+
+
+        if (file) {
+            if (file.size > maxSize) {
+                setError('File size exceeds 2MB');
+                setImagePreview(null);
+            }
+            // Validasi tipe file
+            else if (!validTypes.includes(file.type)) {
+                setError('Only JPEG and PNG files are allowed');
+                setImagePreview(null);
+            } else {
+                setError('');
+                const imageUrl = URL.createObjectURL(file);
+                setImagePreview(imageUrl);
+            }
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+        setIsLoading(true)
+        
+        const imageValue = isDeleteImage ? null : image;
+        
         if (username) {
             try {
                 // Pastikan image yang dikirim adalah File
@@ -48,15 +77,18 @@ const UpdateUserForm = () => {
                         id: idUser,
                         username: username,
                         email: email,
-                        image: image,
-                    });
+                        image: imageValue,
+                    }, isDeleteImage);
+                    setIsLoading(false)
                 } else if (image == null) {
                     await UpdateUser({
                         id: idUser,
                         username: username,
                         email: email
-                    });
+                    }, isDeleteImage);
+                    setIsLoading(false)
                 } else {
+                    setIsLoading(false)
                     alert("Invalid image.");
                 }
             } catch (error) {
@@ -73,7 +105,7 @@ const UpdateUserForm = () => {
                 <div className="mt-4">
                     <CirclePhoto username={username} userphoto={imagePreview} />
                     <LabeledInputWrap variant="mt-4">
-                        <ButtonFile accept=".jpg, .png" onchange={(e) => setImage(e.target.files[0])} name="photo" text="Add Profile Photo" info="Accepted (max:5MB): JPG, PNG" customButton={false} />
+                        <ButtonFile accept=".jpg, .png" onchange={handleImagePreview} name="photo" text="Update Profile Photo" info={error != "" ? error : "Accepted (max:2MB): JPG, PNG"} customButton={false} />
                     </LabeledInputWrap>
                 </div>
                 <LabeledInputWrap variant="mt-4">

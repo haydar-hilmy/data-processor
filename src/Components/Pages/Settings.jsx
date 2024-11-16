@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import Header from "../Fragments/Header/Header"
 import MainLayout from "../Layouts/MainLayout"
-import SubNav from "../Fragments/SubNav/SubNav";
+import SubNav from "../Fragments/SubNav/SubNav"
+import { UpdateUserForm } from "../Fragments/Form/UpdateUserForm"
+
 
 const SettingsTab = () => {
 
@@ -10,6 +12,8 @@ const SettingsTab = () => {
     const handleClickSubTab = (tab) => {
         setSubTab(tab)
     }
+
+
 
 
     return (
@@ -27,7 +31,7 @@ const SettingsTab = () => {
 
             {
                 subTab == "user" ? (
-                    "This is User Tab"
+                    <UpdateUserForm />
                 ) : subTab == "theme" ? (
                     "This is Theme Tab"
                 ) : ("")

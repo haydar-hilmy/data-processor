@@ -58,16 +58,21 @@ const StyledWrapper = styled.div`
   }`;
 
 const ButtonFile = (props) => {
-    const { name, value, variant, text = "Upload", accept, onchange, customButton = true } = props
+    const { name, value, variant, text = "Upload", accept, onchange, customButton = true, info = "" } = props
     return (
         !customButton ? (
             <>
                 <div>
                     <input id={name} onChange={onchange} accept={accept} name={name} value={value} className={`hidden`} type="file" />
-                    <label style={{ minWidth: "fit-content" }} className={`${variant} cursor-pointer border border-transparent bg-blue-700 hover:opacity-80 duration-150 text-white py-2 px-3 rounded-md flex gap-2 items-center`} htmlFor={name}>
+                    <label style={{ minWidth: "fit-content" }} className={`${variant} w-fit cursor-pointer border border-transparent bg-blue-700 hover:opacity-80 duration-150 text-white py-2 px-3 rounded-md flex gap-2 items-center`} htmlFor={name}>
                         <UploadFile />
                         {text}
                     </label>
+                    {
+                        info != "" ? (
+                            <p className='text-sm text-gray-500 mt-1'>{info}</p>
+                        ) : ""
+                    }
                 </div>
             </>
         ) : (

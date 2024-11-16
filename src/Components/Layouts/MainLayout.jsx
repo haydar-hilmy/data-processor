@@ -44,7 +44,7 @@ const MainLayout = (props) => {
 
     return (
         <>
-            <Navbar username={UserData.name} userphoto={UserData.image} activeNav={tab} />
+            <Navbar email={UserData.email} username={UserData.name} userphoto={UserData.image} activeNav={tab} />
             <StyledMain>
                 {children}
             </StyledMain>

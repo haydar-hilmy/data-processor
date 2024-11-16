@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const Navbar = (props) => {
-    const { variant = "", activeNav = "", username = "User", userphoto = null } = props
+    const { variant = "", activeNav = "", username = "User", email = "", userphoto = null } = props
     
     const [openNav, setOpenNav] = useState(false);
     const BackModalRef = useRef(null);
@@ -190,7 +190,7 @@ const Navbar = (props) => {
                     </span>
                 </StyledListNav>
                 <div className="flex items-end h-full">
-                    <UseredPhoto username={username} userphoto={userphoto} />
+                    <UseredPhoto username={username} email={email} userphoto={userphoto} />
                 </div>
             </StyledNav>
         </>

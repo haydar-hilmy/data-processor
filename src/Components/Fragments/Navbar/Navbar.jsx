@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const Navbar = (props) => {
     const { variant = "", activeNav = "", username = "User", email = "", userphoto = null } = props
-    
+
     const [openNav, setOpenNav] = useState(false);
     const BackModalRef = useRef(null);
     const StyledNavRef = useRef(null);
@@ -18,24 +18,24 @@ const Navbar = (props) => {
     const handleTabClick = (tab) => {
         navigate(`/${tab}`)
     }
-    
+
     const toggleNav = () => {
         setOpenNav(!openNav);
     };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-          if (BackModalRef.current && event.target === BackModalRef.current) {
-            setOpenNav(false);
-          }
+            if (BackModalRef.current && event.target === BackModalRef.current) {
+                setOpenNav(false);
+            }
         };
-    
+
         window.addEventListener('click', handleClickOutside);
-    
+
         return () => {
-          window.removeEventListener('click', handleClickOutside);
+            window.removeEventListener('click', handleClickOutside);
         };
-      }, []);
+    }, []);
 
 
     const StyledNav = styled.nav`
@@ -52,7 +52,7 @@ const Navbar = (props) => {
     box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.2);
     padding: 12px;
     transition-duration: 150ms;
-    z-index: 4;
+    z-index: 20;
     transition: transform 0.2s ease-in-out;
     user-select: none;
     
@@ -83,7 +83,7 @@ const Navbar = (props) => {
         box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.2);
         position: fixed;
         top: 0;
-        z-index: 10;
+        z-index: 18;
         transform: translateY(-100%);
         transition-duration: 150ms;
 
@@ -101,13 +101,31 @@ const Navbar = (props) => {
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.4);
-    z-index: 4;
+    z-index: 19;
     `
 
     const StyledTitleNav = styled.div`
     width: 100%;
-    padding: 2px 14px;
-    `
+    
+    div.div:nth-child(1) {
+        display: block;
+        padding: 2px 14px;
+    }
+    div.div:nth-child(2) {
+        display: none;
+    }
+        
+    @media (max-width: 768px) {
+        div.div:nth-child(1) {
+            display: none;
+        }
+        div.div:nth-child(2) {
+            display: block;
+        }
+    }
+`;
+
+
 
 
     const StyledListNav = styled.div`
@@ -160,7 +178,12 @@ const Navbar = (props) => {
             }
             <StyledNav ref={StyledNavRef} open={openNav} className={`${variant} bg-secondary-dark`}>
                 <StyledTitleNav>
-                    <h1 className="text-2xl font-medium">Data Minim</h1>
+                    <div className="div">
+                        <h1 className="text-2xl font-medium">Data Minim</h1>
+                    </div>
+                    <div className="div">
+                        <UseredPhoto username={username} email={email} userphoto={userphoto} />
+                    </div>
                 </StyledTitleNav>
                 <StyledListNav>
                     <span
@@ -189,7 +212,7 @@ const Navbar = (props) => {
                         <HelpIcon /> Help
                     </span>
                 </StyledListNav>
-                <div className="flex items-end h-full">
+                <div className="hidden items-end h-full md:flex">
                     <UseredPhoto username={username} email={email} userphoto={userphoto} />
                 </div>
             </StyledNav>

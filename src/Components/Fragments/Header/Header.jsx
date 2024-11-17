@@ -7,7 +7,7 @@ border-bottom-width: 2px;
 border-bottom-color: #424242;
 margin-bottom: 1rem;
 position: sticky;
-z-index: 4;
+z-index: 9;
 top: 0;
 
 @media (max-width: 768px){

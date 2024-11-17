@@ -19,6 +19,7 @@ const UpdateUserForm = () => {
     const [imagePreview, setImagePreview] = useState(null)
     const [isDeleteImage, setDeleteImage] = useState(false)
     const [error, setError] = useState('');
+    const [infoStatus, setInfoStatus] = useState('')
 
     const maxSize = 2 * 1024 * 1024;
     const validTypes = ['image/jpeg', 'image/png'];
@@ -101,7 +102,7 @@ const UpdateUserForm = () => {
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="mb-5">
                 <div className="mt-4">
                     <CirclePhoto username={username} userphoto={imagePreview} />
                     <LabeledInputWrap variant="mt-4">
@@ -116,7 +117,7 @@ const UpdateUserForm = () => {
                     <CheckboxLabel text="Delete image?" checked={isDeleteImage} onchange={(e) => setDeleteImage(e.target.checked)} />
                 </div>
                 <div className="mt-4">
-                    <ButtonMain isLoading={isLoading ? true : false} disabled={isLoading ? true : false} variant="bg-btn-primary gap-2">
+                    <ButtonMain info={infoStatus} isLoading={isLoading ? true : false} disabled={isLoading ? true : false} variant="bg-btn-primary gap-2">
                         {
                             isLoading ? <CircleLoading size={23} isLoading={true} /> : <Done />
                         }

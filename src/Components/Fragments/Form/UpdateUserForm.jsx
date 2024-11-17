@@ -21,7 +21,7 @@ const UpdateUserForm = () => {
     const [error, setError] = useState('');
     const [infoStatus, setInfoStatus] = useState('')
 
-    const maxSize = 2 * 1024 * 1024;
+    const maxSize = 2 * 1024 * 1024
     const validTypes = ['image/jpeg', 'image/png'];
 
 
@@ -44,20 +44,23 @@ const UpdateUserForm = () => {
 
     const handleImagePreview = (event) => {
         const file = event.target.files[0] // Mendapatkan file pertama yang dipilih
-        setImage(event.target.files[0])
-
-
+        
         if (file) {
             if (file.size > maxSize) {
                 setError('File size exceeds 2MB');
+                setImage(null)
                 setImagePreview(null);
+                event.target.value = null;
             }
             // Validasi tipe file
             else if (!validTypes.includes(file.type)) {
                 setError('Only JPEG and PNG files are allowed');
                 setImagePreview(null);
+                setImage(null)
+                event.target.value = null;
             } else {
                 setError('');
+                setImage(event.target.files[0])
                 const imageUrl = URL.createObjectURL(file);
                 setImagePreview(imageUrl);
             }
@@ -67,6 +70,7 @@ const UpdateUserForm = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(true)
+        setInfoStatus("Updating...");
         
         const imageValue = isDeleteImage ? null : image;
         
@@ -81,6 +85,7 @@ const UpdateUserForm = () => {
                         image: imageValue,
                     }, isDeleteImage);
                     setIsLoading(false)
+                    setInfoStatus("Successfully Updated!");
                 } else if (image == null) {
                     await UpdateUser({
                         id: idUser,
@@ -88,12 +93,13 @@ const UpdateUserForm = () => {
                         email: email
                     }, isDeleteImage);
                     setIsLoading(false)
+                    setInfoStatus("Successfully Updated!");
                 } else {
                     setIsLoading(false)
-                    alert("Invalid image.");
+                    setInfoStatus("Invalid image.");
                 }
             } catch (error) {
-                alert("Sorry, failed to update data");
+                setInfoStatus("Sorry, Failed to update data!");
                 console.error("Error: ", error);
             }
         }

@@ -22,7 +22,7 @@ align-items: center;
     border-radius: 5px;
     padding: 5px 12px;
     position: absolute;
-    z-index: 6;
+    z-index: 10;
     bottom: 100%; /* Position the tooltip above */
     left: 50%;
     transform: translateX(-50%);

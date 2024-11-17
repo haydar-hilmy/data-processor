@@ -3,6 +3,7 @@ import Header from "../Fragments/Header/Header"
 import MainLayout from "../Layouts/MainLayout"
 import SubNav from "../Fragments/SubNav/SubNav"
 import { UpdateUserForm } from "../Fragments/Form/UpdateUserForm"
+import UpdateTheme from "../Fragments/Form/UpdateTheme"
 
 
 const SettingsTab = () => {
@@ -33,7 +34,7 @@ const SettingsTab = () => {
                 subTab == "user" ? (
                     <UpdateUserForm />
                 ) : subTab == "theme" ? (
-                    "This is Theme Tab"
+                    <UpdateTheme />
                 ) : ("")
             }
         </>

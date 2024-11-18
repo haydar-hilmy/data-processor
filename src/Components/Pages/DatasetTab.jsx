@@ -85,6 +85,7 @@ const DatasetTab = () => {
                                         size: `${sizeInKB > 1000 ? `${sizeInMB} MB` : `${sizeInKB} KB`}`
                                     }}
                                     key={index}
+                                    onclickDataset={() => navigate(dataset.id)}
                                 />
                             );
                         })

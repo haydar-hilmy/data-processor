@@ -72,7 +72,7 @@ const DatasetItemList = (props) => {
 
     return (
         <StyledItemList>
-            <div style={{ flex: 1, cursor: 'pointer' }} className="tooltip flex flex-col gap-1">
+            <div onDoubleClick={onclickDataset} style={{ flex: 1, cursor: 'pointer', userSelect: "none" }} className="tooltip flex flex-col gap-1">
                 <span className="tooltiptext">Double Tap to see</span>
                 <h3 style={{ letterSpacing: '0.02rem', wordBreak: 'break-all' }} className="text-xl font-medium">{info.name}</h3>
                 <h6 style={{ letterSpacing: '0.03rem', wordBreak: 'break-all' }} className="text-xs font-light">{info.id}</h6>

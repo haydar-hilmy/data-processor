@@ -6,6 +6,7 @@ import DatasetTab from "./Components/Pages/DatasetTab";
 import { useEffect } from "react";
 import SettingsTab from "./Components/Pages/Settings";
 import MainLayout from "./Components/Layouts/MainLayout";
+import DatasetTabDetail from "./Components/Pages/DatasetTabDetail";
 
 // const myRouter = createBrowserRouter([
 //   {
@@ -51,7 +52,8 @@ const myRouter = createBrowserRouter([
       },
       {
         path: '/dataset/:iddataset',
-        element: <DatasetTab />
+        element: <DatasetTabDetail />,
+        title: "Dataset Records & Insight"
       },
       {
         path: '/settings',

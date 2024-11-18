@@ -29,7 +29,7 @@ flex-direction: row;
 
 
 const Header = (props) => {
-    const { children, variant, headerText = "Data Minim", isBackButton = true } = props
+    const { children, variant, headerText = "Data Minim", isBackButton = true, infoText = "" } = props
     const navigate = useNavigate();
 
     return (
@@ -40,7 +40,14 @@ const Header = (props) => {
                 </div>
             ) : ("")}
             <StyledHeaderText className="py-3">
-                <h1 style={{ flex: 1 }} className="text-3xl font-medium">{headerText}</h1>
+                <div style={{ flex: 1 }} className="flex flex-col">
+                    <h1 className="text-3xl font-medium">{headerText}</h1>
+                    {
+                        infoText != "" ? (
+                            <span className='text-sm text-gray-500 mt-1'>{infoText}</span>
+                        ) : ""
+                    }
+                </div>
                 <div className="flex flex-row gap-2 flex-wrap items-center">
                     {children}
                 </div>

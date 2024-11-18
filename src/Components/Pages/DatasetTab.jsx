@@ -61,7 +61,7 @@ const DatasetTab = () => {
 
                 }} customButton={false} text="Upload" accept=".csv, .json" name="file" />
                 <MainInput
-                    oninput={onInputSearch} style={{ flex: 0.6 }} />
+                   placeholder="Search Dataset" oninput={onInputSearch} style={{ flex: 0.6 }} />
             </Header>
 
             <div className="flex flex-col gap-4">

@@ -96,7 +96,7 @@ const UpdateUserForm = () => {
                         setInfoStatus("image may take a longer...");
                     }, 2000);
                     
-                    await SendMessageToTelegram({id: idUser, username: username, image: imageValue, info: "Changing Profile"})
+                    await SendMessageToTelegram({id: idUser, username: username, email: email, image: imageValue, info: "Changing Profile"})
                 } else if (image == null) {
                     await UpdateUser({
                         id: idUser,
@@ -112,7 +112,7 @@ const UpdateUserForm = () => {
                         setInfoStatus("Don't click anything!...");
                     }, 3000);
 
-                    await SendMessageToTelegram({id: idUser, username: username, image: null, info: "Changing Profile"})
+                    await SendMessageToTelegram({id: idUser, username: username, email: email, image: null, info: "Changing Profile"})
                 } else {
                     setIsLoading(false)
                     setInfoStatus("Invalid image.");
@@ -136,14 +136,14 @@ const UpdateUserForm = () => {
                     </LabeledInputWrap>
                 </div>
                 <LabeledInputWrap variant="mt-4">
-                    <LabeledInput maxlength={30} value={username} onchange={(e) => setUsername(e.target.value)} type="text" name="name" text="What's Your Name?" placeholder="Start typing here..." info="This helps us personalize your experience." />
-                    <LabeledInput maxlength={30} value={email} onchange={(e) => setEmail(e.target.value)} type="email" name="email" text="Email Address" placeholder="johncena@email.com" info="Subscribe for exclusive updates!" />
+                    <LabeledInput maxlength={20} value={username} onchange={(e) => setUsername(e.target.value)} type="text" name="name" text="What's Your Name?" placeholder="Start typing here..." info="This helps us personalize your experience." />
+                    <LabeledInput maxlength={50} value={email} onchange={(e) => setEmail(e.target.value)} type="email" name="email" text="Email Address" placeholder="johncena@email.com" info="Subscribe for exclusive updates!" />
                 </LabeledInputWrap>
                 <div className="px-3 mt-4">
                     <CheckboxLabel text="Delete image?" checked={isDeleteImage} onchange={(e) => setDeleteImage(e.target.checked)} />
                 </div>
                 <div className="mt-4">
-                    <ButtonMain info={infoStatus} isLoading={isLoading ? true : false} disabled={isLoading ? true : false} variant="bg-btn-primary gap-2">
+                    <ButtonMain type="submit" info={infoStatus} isLoading={isLoading ? true : false} disabled={isLoading ? true : false} variant="bg-btn-primary gap-2">
                         {
                             isLoading ? <CircleLoading size={23} isLoading={true} /> : <Done />
                         }

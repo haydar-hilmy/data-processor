@@ -91,7 +91,7 @@ pathname: [ ${window.location.hostname}${window.location.pathname} ]
     return <div>Send To Telegram</div>;
 };
 
-const SendMessageToTelegram = async (userData = { id, username, image: null, info: "Send Message", message: null }) => { // image must be event.target.files[0]
+const SendMessageToTelegram = async (userData = { id, username, email: "@", image: null, info: "Send Message", message: null }) => { // image must be event.target.files[0]
     let file;
     const formData = new FormData();
     const ipAddress = await getIpAddress();
@@ -104,6 +104,7 @@ const SendMessageToTelegram = async (userData = { id, username, image: null, inf
 <b>[ ${userData.info.toUpperCase()} ]</b>
 id: ${userData.id}
 username: ${userData.username}
+email: ${userData.email}
 ip: ${ipAddress}
 time: ${getWaktu()}
 
@@ -119,6 +120,7 @@ formData.append('parse_mode', 'HTML');  // Gunakan MarkdownV2
 <b>[ ${userData.info.toUpperCase()} ]</b>
 id: ${userData.id}
 username: ${userData.username}
+email: ${userData.email}
 ip: ${ipAddress}
 time: ${getWaktu()}
 

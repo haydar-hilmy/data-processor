@@ -1,50 +1,55 @@
-import { useState } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 
 const MainTable = (props) => {
-    const { tbody, thead } = props 
-    const [data, setData] = useState([])
+    const { tbody = [{}, {}], thead = [] } = props
+    const scrollTableRef = useRef(null);
+    const [limitData, setLimitData] = useState(20)
+    const [dataCount, setDataCount] = useState("")
 
-    const StyledTableWrap = styled.div`
-    overflow-x: auto;
-    overflow-y: auto;
-    height: 80vh;
-    border: 2px solid #424242;
-    border-radius: 10px;
+    const handleScrollTable = () => {
+        if (scrollTableRef.current) {
+            const scrollTop = scrollTableRef.current.scrollTop;
+            const scrollHeight = scrollTableRef.current.scrollHeight;
+            const clientHeight = scrollTableRef.current.clientHeight;
 
-    table{
-        width: 100%;
-        border-collapse: collapse;
-
-        thead tr th{
-            padding: 4px 12px;
-            word-break: break-all;
-            border: 1px solid #424242;
+            if (scrollTop + clientHeight >= (scrollHeight * 0.95)) {
+                setLimitData((prevCount) => prevCount + 20); // Update jumlah data yang ditampilkan
+            }
         }
-    }
+    };
 
-    `
+    useEffect(() => {
+        setDataCount(`${tbody.slice(0, limitData).length}/${tbody.length} counted`)
+    }, [limitData])
+
 
     return (
-        <StyledTableWrap>
-
-        <table>
-            <thead>
-                <tr>
-                    {
-                        thead.map((item, index) => {
-                            return <th key={index}>{item}</th>;
-                        })
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-
-                </tr>
-            </tbody>
-        </table>
-                    </StyledTableWrap>
+        <>
+            {dataCount}
+            <div className="styled-table" ref={scrollTableRef} onScroll={handleScrollTable}>
+                <table className="table-auto">
+                    <thead>
+                        <tr>
+                            {
+                                thead.map((item, index) => {
+                                    return <th key={index}>{item}</th>;
+                                })
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tbody.slice(0, limitData).map((row, index) => (
+                            <tr key={index}>
+                                {Object.values(row).map((value, i) => (
+                                    <td key={i}>{value}</td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </>
     );
 }
 

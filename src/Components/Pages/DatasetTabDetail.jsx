@@ -22,6 +22,7 @@ const DatasetTabDetail = () => {
             setDatasets(result);
             setIsLoading(false);
             setThead(getColumnNames(result.data))
+            setTbody(result.data)
         }).catch(err => {
             console.error(err);
         });
@@ -54,7 +55,7 @@ const DatasetTabDetail = () => {
                         />
                     </Header>
                     <div className="flex flex-col gap-4">
-                        <MainTable thead={thead} />
+                        <MainTable tbody={tbody} thead={thead} />
                     </div>
                     
                 </>

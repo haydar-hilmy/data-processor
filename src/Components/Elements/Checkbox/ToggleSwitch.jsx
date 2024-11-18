@@ -3,23 +3,20 @@ import styled from 'styled-components';
 
 const ToggleSwitch = (props) => {
 
-  const { sizeBtn = 2.25 } = props
+  const { sizeBtn = 2.5 } = props
 
-  const ratio = 6.25 / 2.25
-  const topPosition = 0.438 * sizeBtn / 3.25;
-  const leftPosition = 0.438 * sizeBtn / 3.25;
-  const offset = 0.438 * sizeBtn / 3.25;
-
+  const ratio = 6.25 / 2.25; // ratio ukuran utama dengan elemen ::before
+  const offset = 0.438 * sizeBtn / 6.25; // offset proporsional berdasarkan sizeBtn
 
   const StyledWrapper = styled.div`
+  height: ${sizeBtn/2}em;
     .theme-checkbox {
       --toggle-size: 16px;
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
       width: ${sizeBtn}em;
-      aspect-ratio: 6.25/3.125;
-      height: auto;
+      height: ${sizeBtn / 2}em;
       background: -webkit-gradient(linear, left top, right top, color-stop(50%, #efefef), color-stop(50%, #2a2a2a)) no-repeat;
       background: -o-linear-gradient(left, #efefef 50%, #2a2a2a 50%) no-repeat;
       background: linear-gradient(to right, #efefef 50%, #2a2a2a 50%) no-repeat;
@@ -37,11 +34,10 @@ const ToggleSwitch = (props) => {
     .theme-checkbox::before {
       content: "";
       width: ${sizeBtn / ratio}em;
-      aspect-ratio: 2.25/2.25;
-      height: auto;
+      height: ${sizeBtn / ratio}em;
       position: absolute;
-      top: ${topPosition}em;
-      left: ${leftPosition}em;
+      top: ${offset}em;
+      left: ${offset}em;
       background: -webkit-gradient(linear, left top, right top, color-stop(50%, #efefef), color-stop(50%, #2a2a2a)) no-repeat;
       background: -o-linear-gradient(left, #efefef 50%, #2a2a2a 50%) no-repeat;
       background: linear-gradient(to right, #efefef 50%, #2a2a2a 50%) no-repeat;
@@ -54,7 +50,7 @@ const ToggleSwitch = (props) => {
     }
   
     .theme-checkbox:checked::before {
-      left: calc(100% - ${sizeBtn / ratio}rem - ${offset}rem);
+      left: calc(100% - ${sizeBtn / ratio}em - ${offset}em);
       background-position: 0;
     }
   

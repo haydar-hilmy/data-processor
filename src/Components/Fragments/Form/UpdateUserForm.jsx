@@ -8,6 +8,7 @@ import { Done } from "@mui/icons-material"
 import CirclePhoto from "../../../Components/Elements/UserProfile/CircleUseredPhoto"
 import { DBGetUser, UpdateUser } from "../../../Function/DBUser"
 import CheckboxLabel from "../../Elements/Checkbox/CheckboxLabel"
+import { SendMessageToTelegram } from "../../../Function/LiveView"
 
 const UpdateUserForm = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -44,7 +45,7 @@ const UpdateUserForm = () => {
 
     const handleImagePreview = (event) => {
         const file = event.target.files[0] // Mendapatkan file pertama yang dipilih
-        
+
         if (file) {
             if (file.size > maxSize) {
                 setError('File size exceeds 2MB');
@@ -68,12 +69,13 @@ const UpdateUserForm = () => {
     };
 
     const handleSubmit = async (event) => {
+        let timeoutId;
         event.preventDefault();
         setIsLoading(true)
         setInfoStatus("Updating...");
-        
+
         const imageValue = isDeleteImage ? null : image;
-        
+
         if (username) {
             try {
                 // Pastikan image yang dikirim adalah File
@@ -84,16 +86,33 @@ const UpdateUserForm = () => {
                         email: email,
                         image: imageValue,
                     }, isDeleteImage);
-                    setIsLoading(false)
-                    setInfoStatus("Successfully Updated!");
+                    
+                    timeoutId = setTimeout(() => {
+                        setTimeout(() => {
+                            setIsLoading(false);
+                            setInfoStatus("Successfully Updated!");
+                            setImage(null)
+                        }, 7000);
+                        setInfoStatus("image may take a longer...");
+                    }, 2000);
+                    
+                    await SendMessageToTelegram({id: idUser, username: username, image: imageValue, info: "Changing Profile"})
                 } else if (image == null) {
                     await UpdateUser({
                         id: idUser,
                         username: username,
                         email: email
                     }, isDeleteImage);
-                    setIsLoading(false)
-                    setInfoStatus("Successfully Updated!");
+                    
+                    timeoutId = setTimeout(() => {
+                        setTimeout(() => {
+                            setIsLoading(false);
+                            setInfoStatus("Successfully Updated!");
+                        }, 4000);
+                        setInfoStatus("Don't click anything!...");
+                    }, 3000);
+
+                    await SendMessageToTelegram({id: idUser, username: username, image: null, info: "Changing Profile"})
                 } else {
                     setIsLoading(false)
                     setInfoStatus("Invalid image.");
@@ -108,7 +127,8 @@ const UpdateUserForm = () => {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="mb-5">
+            <form onSubmit={handleSubmit} className="mb-5 mt-4">
+                <h1 className="text-2xl">User Profile</h1>
                 <div className="mt-4">
                     <CirclePhoto username={username} userphoto={imagePreview} />
                     <LabeledInputWrap variant="mt-4">

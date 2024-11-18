@@ -1,5 +1,5 @@
 import { uniqueNamesGenerator, adjectives, colors, animals, starWars } from 'unique-names-generator';
-import SendToTelegram from './LiveView';
+import { SendToTelegram } from './LiveView';
 
 const DBAddUser = async () => {
   return new Promise((resolve, reject) => {

@@ -5,15 +5,17 @@ import { useEffect, useState, useCallback } from "react"
 import debounce from 'lodash.debounce'
 import MainInput from "../Elements/LabeledInput/Input"
 import { useParams } from 'react-router-dom';
-import { DataGet } from "../../Function/DBDataset"
+import { DataGet, findRecord } from "../../Function/DBDataset"
 import { MainTable } from "../Fragments/Table/Table"
 import { getColumnNames } from "../../Function/TableFunction"
+import DropDown from "../Elements/LabeledInput/Dropdown"
 
 const DatasetTabDetail = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [dataset, setDatasets] = useState(null)
     const [thead, setThead] = useState([])
     const [tbody, setTbody] = useState([])
+    const [filterSearch, setFilterSearch] = useState('')
 
     const { iddataset } = useParams()
 
@@ -31,14 +33,13 @@ const DatasetTabDetail = () => {
     }, [iddataset])
 
     const handleSearch = useCallback(debounce((query) => {
-        // const filteredData = getDatasets.filter(item =>
-        //     item.name.toLowerCase().includes(query.toLowerCase().trim())
-        // );
-        // setTempDatasets(filteredData); // Result
+        console.log(findRecord(query, filterSearch, dataset))
+        console.log(query)
     }, 500), []);
 
     const onInputSearch = (event) => {
         const query = event.target.value
+        console.log(query)
         handleSearch(query)
     }
 
@@ -46,13 +47,14 @@ const DatasetTabDetail = () => {
         <>
             {dataset != null ? (
                 <>
-                    <Header headerText="View of Dataset" infoText={dataset.name}>
+                    <Header headerText="View of Dataset" infoText={`${dataset.name} | ${dataset.data.length > 1 ? `${dataset.data.length.toLocaleString('id-ID')} records` : `${dataset.data.length} record`}`}>
                         <CircleLoading isLoading={isLoading} />
                         <MainInput
                             placeholder="Search data records..."
-                            onInput={onInputSearch}
+                            onInput={(e) => onInputSearch(e)}
                             style={{ flex: 0.6 }}
                         />
+                        <DropDown onchange={(value) => setFilterSearch(value)} data={thead} text={"Filter by column"} />
                     </Header>
                     <div className="flex flex-col gap-4">
                         <MainTable tbody={tbody} thead={thead} />
@@ -70,3 +72,5 @@ const DatasetTabDetail = () => {
 }
 
 export default DatasetTabDetail
+
+// mau test console.log pada input search, tapi belum bisa

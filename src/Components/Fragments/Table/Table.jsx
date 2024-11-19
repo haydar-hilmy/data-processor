@@ -26,7 +26,6 @@ const MainTable = (props) => {
 
     return (
         <>
-            {dataCount}
             <div className="styled-table" ref={scrollTableRef} onScroll={handleScrollTable}>
                 <table className="table-auto">
                     <thead>

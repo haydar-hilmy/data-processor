@@ -126,11 +126,11 @@ async function DatasetDelete(id) {
     }
 }
 
-const findRecord = (search, category, obj) => {
+const findRecord = (search, category = "", obj = [{}, {}]) => {
     if(search != ""){
-        const columns = Object.keys(obj.data[0])
+        // const columns = Object.keys(obj.[0])
         // const columnName = Object.keys(obj.data[0])[columns.indexOf(category)]
-        return obj.data.filter(item => typeof item[category] === 'string' && item[category].toLowerCase().includes(search.toLowerCase()))
+        return obj.filter(item => typeof item[category] === 'string' && item[category].toLowerCase().includes(search.toLowerCase()))
         // return [{}, {}]
     }
 }

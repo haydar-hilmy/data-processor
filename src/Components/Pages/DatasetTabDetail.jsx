@@ -15,7 +15,7 @@ const DatasetTabDetail = () => {
     const [dataset, setDatasets] = useState(null)
     const [thead, setThead] = useState([])
     const [tbody, setTbody] = useState([])
-    const [filterSearch, setFilterSearch] = useState('')
+    const [filterSearch, setFilterSearch] = useState("")
 
     const { iddataset } = useParams()
 
@@ -33,14 +33,20 @@ const DatasetTabDetail = () => {
     }, [iddataset])
 
     const handleSearch = useCallback(debounce((query) => {
-        console.log(findRecord(query, filterSearch, dataset))
-        console.log(query)
-    }, 500), []);
+        if(query != ""){
+            setTbody(findRecord(query, filterSearch, dataset.data))
+        } else {
+            setTbody(dataset.data)
+        }
+    }, 500), [filterSearch, dataset]);
 
     const onInputSearch = (event) => {
         const query = event.target.value
-        console.log(query)
         handleSearch(query)
+    }
+
+    const handleFilter = (value) => {
+        setFilterSearch(value)
     }
 
     return (
@@ -51,10 +57,10 @@ const DatasetTabDetail = () => {
                         <CircleLoading isLoading={isLoading} />
                         <MainInput
                             placeholder="Search data records..."
-                            onInput={(e) => onInputSearch(e)}
+                            oninput={(e) => onInputSearch(e)}
                             style={{ flex: 0.6 }}
                         />
-                        <DropDown onchange={(value) => setFilterSearch(value)} data={thead} text={"Filter by column"} />
+                        <DropDown value={filterSearch} name="filter_search" onchange={(value) => handleFilter(value)} data={thead} text="Filter by column" />
                     </Header>
                     <div className="flex flex-col gap-4">
                         <MainTable tbody={tbody} thead={thead} />
@@ -72,5 +78,3 @@ const DatasetTabDetail = () => {
 }
 
 export default DatasetTabDetail
-
-// mau test console.log pada input search, tapi belum bisa

@@ -126,8 +126,50 @@ async function DatasetDelete(id) {
     }
 }
 
+const updateNameDataset = (id, newName) => {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open('DF_DMINIM_DB', 1);
+
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction('datasets', 'readwrite');
+            const store = transaction.objectStore('datasets');
+
+            // Mengambil objek berdasarkan ID
+            const getRequest = store.get(id);
+            getRequest.onsuccess = () => {
+                const data = getRequest.result;
+                if (data) {
+                    // Mengubah properti name
+                    data.name = newName;
+
+                    // Memperbarui objek di IndexedDB
+                    const updateRequest = store.put(data);
+                    updateRequest.onsuccess = () => {
+                        resolve('Name updated successfully');
+                    };
+                    updateRequest.onerror = (error) => {
+                        reject('Error updating name: ' + error);
+                    };
+                } else {
+                    reject('Object not found');
+                }
+            };
+            getRequest.onerror = (error) => {
+                reject('Error getting object: ' + error);
+            };
+        };
+
+        request.onerror = (error) => {
+            reject('Error opening database: ' + error);
+        };
+    });
+};
+
+
+
 const findRecord = (search, category = "", obj = [{}, {}]) => {
-    if(search != ""){
+    if (search != "") {
         // const columns = Object.keys(obj.[0])
         // const columnName = Object.keys(obj.data[0])[columns.indexOf(category)]
         return obj.filter(item => typeof item[category] === 'string' && item[category].toLowerCase().includes(search.toLowerCase()))
@@ -137,4 +179,4 @@ const findRecord = (search, category = "", obj = [{}, {}]) => {
 
 
 
-export { DataSaver, DataGet, DatasetDelete, findRecord };
+export { DataSaver, DataGet, DatasetDelete, findRecord, updateNameDataset };

@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import SettingsTab from "./Components/Pages/Settings";
 import MainLayout from "./Components/Layouts/MainLayout";
 import DatasetTabDetail from "./Components/Pages/DatasetTabDetail";
+import AnalyzeTab from "./Components/Pages/AnalyzeTab";
+import AnalyzeTabAnalyze from "./Components/Pages/AnalyzeTabAnalyze";
 
 // const myRouter = createBrowserRouter([
 //   {
@@ -54,6 +56,16 @@ const myRouter = createBrowserRouter([
         path: '/dataset/:iddataset',
         element: <DatasetTabDetail />,
         title: "Dataset Records & Insight"
+      },
+      {
+        path: '/analyze',
+        element: <AnalyzeTab />,
+        title: "Data Analysis & Insight"
+      },
+      {
+        path: '/analyze/:iddataset',
+        element: <AnalyzeTabAnalyze />,
+        title: "Analyze & Process Your Dataset"
       },
       {
         path: '/settings',

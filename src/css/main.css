@@ -29,7 +29,7 @@ body {
     flex-direction: column;
     overflow-x: auto;
     overflow-y: auto;
-    max-height: 80vh;
+    max-height: 65vh;
     width: 100%;
     align-items: flex-start;
 
@@ -53,5 +53,12 @@ body {
             padding: 4px 12px;
             border: 1px solid #424242;
         }
+    }
+
+    @media (max-width: 768px) {
+        width: 95%;
+    }
+    @media (max-width: 480px){
+        width: 90%;
     }
 }

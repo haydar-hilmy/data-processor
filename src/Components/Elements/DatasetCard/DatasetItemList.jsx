@@ -1,6 +1,9 @@
-import { Delete, Edit } from "@mui/icons-material"
+import { Analytics, Delete, Edit } from "@mui/icons-material"
 import ButtonMain from "../Button/Button"
 import styled from "styled-components"
+import { useEffect, useRef, useState } from "react"
+import { updateNameDataset } from "../../../Function/DBDataset"
+import { useNavigate } from "react-router-dom"
 
 const StyledItemList = styled.div`
 display: flex;
@@ -66,15 +69,42 @@ align-items: center;
 `
 
 
-
 const DatasetItemList = (props) => {
-    const { info = { id: "", name: "", size: `0mb` }, onDelete, onEdit, onclickDataset } = props
+    const { info = { id: "", name: "", size: `0mb` }, onDelete, onclickDataset, tipText = "Double Tap to see", optionAct = "updateDelete" } = props
+
+    const [isEdit, setIsEdit] = useState(false)
+
+    const inputRef = useRef(null)
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        // Fokuskan input setelah isEdit berubah menjadi true
+        if (isEdit) {
+            inputRef.current.focus();
+        }
+    }, [isEdit]); // Hanya dipanggil ketika isEdit berubah
+
+
+    const handleFocus = () => {
+        setIsEdit(true)
+    };
+
+    const handleBlur = () => {
+        setIsEdit(false)
+        const newName = inputRef.current.innerText.trim()
+        if (newName != "") {
+            updateNameDataset(info.id, newName).then((result) => { }).catch(err => {
+                console.error(err)
+            })
+        }
+    }
 
     return (
         <StyledItemList>
             <div onDoubleClick={onclickDataset} style={{ flex: 1, cursor: 'pointer', userSelect: "none" }} className="tooltip flex flex-col gap-1">
-                <span className="tooltiptext">Double Tap to see</span>
-                <h3 style={{ letterSpacing: '0.02rem', wordBreak: 'break-all' }} className="text-xl font-medium">{info.name}</h3>
+                <span className="tooltiptext">{tipText}</span>
+                <h3 ref={inputRef} contentEditable={isEdit} onBlur={handleBlur} suppressContentEditableWarning={true} autoFocus={isEdit} style={{ letterSpacing: '0.02rem', wordBreak: 'break-all' }} className="text-xl font-medium w-fit">{info.name}</h3>
                 <h6 style={{ letterSpacing: '0.03rem', wordBreak: 'break-all' }} className="text-xs font-light">{info.id}</h6>
             </div>
             <div className="subOption">
@@ -85,12 +115,20 @@ const DatasetItemList = (props) => {
                     <span className="md:text-base text-sm font-normal">{info.size}</span>
                 </div>
                 <div className="subOption-btn flex flex-row items-center gap-2">
-                    <ButtonMain onclick={onDelete} variant="bg-btn-warning">
-                        <Delete />
-                    </ButtonMain>
-                    <ButtonMain variant="bg-btn-success">
-                        <Edit />
-                    </ButtonMain>
+                    {
+                        optionAct == "updateDelete" ?
+                            <>
+                                <ButtonMain onclick={onDelete} variant="bg-btn-warning">
+                                    <Delete />
+                                </ButtonMain>
+                                <ButtonMain onclick={handleFocus} variant="bg-btn-success">
+                                    <Edit />
+                                </ButtonMain>
+                            </> : 
+                            <>
+                                <ButtonMain onclick={() => navigate(info.id)} variant="bg-btn-special"><Analytics/> Analyze</ButtonMain>
+                            </>
+                    }
                 </div>
             </div>
         </StyledItemList>

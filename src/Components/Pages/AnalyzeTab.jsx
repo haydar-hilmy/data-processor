@@ -1,24 +1,21 @@
-import { useEffect, useState, useCallback } from "react"
-import DatasetItemList from "../Elements/DatasetCard/DatasetItemList"
-import Header from "../Fragments/Header/Header"
-import MainLayout from "../Layouts/MainLayout"
-import { DataGet, DatasetDelete } from "../../Function/DBDataset"
-import { bytesToKB, bytesToMB, getObjectSize } from "../../Function/IndexedDBSize"
-import ButtonFile from "../Elements/Button/ButtonFile"
-import MainInput from "../Elements/LabeledInput/Input"
-import debounce from 'lodash.debounce'
-import { handleFileUpload } from "../../Function/HandleFile"
 import { useNavigate } from "react-router-dom"
+import Header from "../Fragments/Header/Header"
 import { CircleLoading } from "../Elements/LoadingAsset/CircleLoading"
+import { useCallback, useState, useEffect } from "react"
+import debounce from "lodash.debounce"
+import { DataGet } from "../../Function/DBDataset"
+import DatasetItemList from "../Elements/DatasetCard/DatasetItemList"
+import { bytesToKB, bytesToMB } from "../../Function/IndexedDBSize"
+import MainInput from "../Elements/LabeledInput/Input"
 
-const DatasetTab = () => {
+const AnalyzeTab = () => {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const [getDatasets, setGetDatasets] = useState([])
-    const [dataUpdated, setDataUpdated] = useState(false)
     const [tempDatasets, setTempDatasets] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [dataUpdated, setDataUpdated] = useState(false)
 
     useEffect(() => {
         DataGet().then((result) => {
@@ -43,23 +40,10 @@ const DatasetTab = () => {
         handleSearch(query)
     }
 
-
     return (
         <>
-            <Header headerText={`Datasets`}>
+            <Header headerText={`Analyze Dataset`}>
                 <CircleLoading isLoading={isLoading} />
-                <ButtonFile
-                onchange={(event) => {
-                    handleFileUpload(event).then((result) => {
-                        DataGet().then((newData) => {
-                            setIsLoading(true)
-                            setGetDatasets(newData)
-                            setTempDatasets(newData)
-                            setDataUpdated(prev => !prev); 
-                        }).catch(err => console.error("Failed to Refresh Datasets: ", err))
-                    })
-
-                }} customButton={false} text="Upload" accept=".csv, .json" name="file" />
                 <MainInput
                    placeholder="Search Dataset" oninput={onInputSearch} style={{ flex: 0.6 }} />
             </Header>
@@ -72,13 +56,7 @@ const DatasetTab = () => {
                             const sizeInMB = bytesToMB(dataset.size);
                             return (
                                 <DatasetItemList
-                                    tipText="Double Tap to See"
-                                    onDelete={() => {
-                                        DatasetDelete(dataset.id).then(() => {
-                                            setIsLoading(true)
-                                            setDataUpdated(prev => !prev)
-                                        }).catch(err => alert("failed: ", err));
-                                    }}
+                                    tipText="Double Tap to Analyze"
                                     info={{
                                         id: dataset.id,
                                         name: dataset.name,
@@ -87,6 +65,7 @@ const DatasetTab = () => {
                                     }}
                                     key={index}
                                     onclickDataset={() => navigate(dataset.id)}
+                                    optionAct="analyze"
                                 />
                             );
                         })
@@ -99,4 +78,4 @@ const DatasetTab = () => {
     )
 }
 
-export default DatasetTab
+export default AnalyzeTab

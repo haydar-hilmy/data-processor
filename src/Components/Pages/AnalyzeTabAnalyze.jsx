@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { DataGet, findRecord } from "../../Function/DBDataset"
 import { MainTable } from "../Fragments/Table/Table"
 import { getColumnNames } from "../../Function/TableFunction"
-import DropDown from "../Elements/LabeledInput/Dropdown"
+import DropDown from "../Elements/LabeledInput/DropDown"
 import ButtonMain from "../Elements/Button/Button"
 import { Analytics } from "@mui/icons-material"
 import SubNav from "../Fragments/SubNav/SubNav"

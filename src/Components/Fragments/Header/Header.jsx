@@ -1,4 +1,5 @@
 import { ArrowBackIos } from "@mui/icons-material"
+import { useMediaQuery } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
@@ -10,20 +11,20 @@ const Header = (props) => {
     const [lastScrollTop, setLastScrollTop] = useState(0);
     const [scrollingDown, setScrollingDown] = useState(false);
     const [navbarVisible, setNavbarVisible] = useState(true);
-    const headerRef = useRef(null);
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-            if (window.getComputedStyle(headerRef.current).display === 'none' || window.innerWidth >= 450) {
-                if (scrollTop > lastScrollTop) {
+            if (scrollTop > lastScrollTop) {
+                if(!isMobile){
                     // Scroll ke bawah
                     setNavbarVisible(false);
-                } else {
-                    // Scroll ke atas
-                    setNavbarVisible(true);
                 }
+            } else {
+                // Scroll ke atas
+                setNavbarVisible(true);
             }
 
             setLastScrollTop(scrollTop <= 0 ? 0 : scrollTop); // Menghindari nilai negatif
@@ -35,21 +36,6 @@ const Header = (props) => {
         };
     }, [lastScrollTop]);
 
-
-    const StyledHeader = styled.header`
-        border-bottom-width: 2px;
-        border-bottom-color: #424242;
-        margin-bottom: 1rem;
-        position: sticky;
-        z-index: 7;
-        top: 0;
-        transform: ${navbarVisible ? 'translateY(-100%)' : 'translateY(0)'};
-        transition-duration: 150ms;
-
-        @media (max-width: 768px){
-            top: 5vh;
-        }   
-`
 
     const StyledHeaderText = styled.div`
     display: flex;
@@ -65,7 +51,16 @@ const Header = (props) => {
 
 
     return (
-        <StyledHeader ref={headerRef} className={`${variant} bg-primary-dark`}>
+        <header style={{
+            transform: `${navbarVisible ? "translateY(0)" : "translateY(-130%)"}`,
+            borderBottomColor: "#424242",
+            borderBottomWidth: "2px",
+            marginBottom: "1rem",
+            position: isMobile ? 'unset' : 'sticky',
+            zIndex: 7,
+            top: isMobile ? '5vh' : '0',
+            transitionDuration: '250ms',
+        }} className={`${variant} bg-primary-dark`}>
             {isBackButton ? (
                 <div className="w-auto">
                     <span onClick={() => navigate(-1)} className="flex items-center gap-1 text-base font-normal w-fit py-1 px-1 cursor-pointer duration-150 hover:opacity-60"><ArrowBackIos fontSize="inherit" />back</span>
@@ -84,7 +79,7 @@ const Header = (props) => {
                     {children}
                 </div>
             </StyledHeaderText>
-        </StyledHeader>
+        </header>
     )
 }
 

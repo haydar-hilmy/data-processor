@@ -11,6 +11,7 @@ import DropDown from "../Elements/LabeledInput/Dropdown"
 import ButtonMain from "../Elements/Button/Button"
 import { Analytics } from "@mui/icons-material"
 import SubNav from "../Fragments/SubNav/SubNav"
+import AnalyzeMenu from "../Fragments/Analyze/AnalyzeMenu"
 
 const AnalyzeTabAnalyze = () => {
 
@@ -99,7 +100,7 @@ const AnalyzeTabAnalyze = () => {
 
                     {
                         subTab == "menu" ? (
-                            "Menu Tab"
+                            <AnalyzeMenu />
                         ) : subTab == "analysis" ? (
                             "Analysis Tab"
                         ) : subTab == "result" ?(

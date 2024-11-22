@@ -13,7 +13,7 @@ const MainTable = (props) => {
             const scrollHeight = scrollTableRef.current.scrollHeight;
             const clientHeight = scrollTableRef.current.clientHeight;
 
-            if (scrollTop + clientHeight >= (scrollHeight * 0.98)) {
+            if (scrollTop + clientHeight >= (scrollHeight * 0.98) && limitData <= tbody.length) {
                 setLimitData((prevCount) => prevCount + 20); // Update jumlah data yang ditampilkan
             }
         }

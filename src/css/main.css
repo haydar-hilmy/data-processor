@@ -29,7 +29,7 @@ body {
     flex-direction: column;
     overflow-x: auto;
     overflow-y: auto;
-    max-height: 65vh;
+    max-height: 50vh;
     width: 100%;
     align-items: flex-start;
 

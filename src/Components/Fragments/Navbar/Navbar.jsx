@@ -44,7 +44,7 @@ const Navbar = (props) => {
     align-items: stretch;
     gap: 16px;
     height: 100vh;
-    width: 20vw;
+    width: 19vw;
     position: fixed;
     float: left;
     left: 0;

@@ -140,7 +140,7 @@ const UpdateUserForm = () => {
                     <LabeledInput maxlength={50} value={email} onchange={(e) => setEmail(e.target.value)} type="email" name="email" text="Email Address" placeholder="johncena@email.com" info="Subscribe for exclusive updates!" />
                 </LabeledInputWrap>
                 <div className="px-3 mt-4">
-                    <CheckboxLabel text="Delete image?" checked={isDeleteImage} onchange={(e) => setDeleteImage(e.target.checked)} />
+                    <CheckboxLabel text="Delete Profile Photo?" checked={isDeleteImage} onchange={(e) => setDeleteImage(e.target.checked)} />
                 </div>
                 <div className="mt-4">
                     <ButtonMain type="submit" info={infoStatus} isLoading={isLoading ? true : false} disabled={isLoading ? true : false} variant="bg-btn-primary gap-2">

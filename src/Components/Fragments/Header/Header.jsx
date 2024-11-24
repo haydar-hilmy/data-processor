@@ -36,6 +36,8 @@ const Header = (props) => {
         };
     }, [lastScrollTop]);
 
+    
+
 
     const StyledHeaderText = styled.div`
     display: flex;

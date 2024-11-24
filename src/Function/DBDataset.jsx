@@ -169,6 +169,10 @@ const updateNameDataset = (id, newName) => {
 
 
 const findRecord = (search, category = "", obj = [{}, {}]) => {
+    if (!Array.isArray(obj)) {
+        console.error("Invalid dataset format");
+        return [];
+    }
     if (search != "") {
         // const columns = Object.keys(obj.[0])
         // const columnName = Object.keys(obj.data[0])[columns.indexOf(category)]

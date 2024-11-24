@@ -7,7 +7,7 @@ import { myRouter } from "../../App"
 
 const StyledMain = styled.main`
 padding: 24px;
-margin-left: 20vw;
+margin-left: 19vw;
 
 @media (max-width: 768px){
     margin-left: 0;

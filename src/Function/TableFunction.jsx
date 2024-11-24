@@ -4,4 +4,37 @@ function getColumnNames(data) {
     return Object.keys(data[0]);
 }
 
-export { getColumnNames }
+function detectColumnType(data = [{}, {}]) {
+    const columnTypes = {};
+    // Iterasi setiap kolom dalam objek data
+    Object.keys(data[0]).forEach(column => {
+        const sampleValue = data[0][column];
+        if (!isNaN(sampleValue) && typeof parseFloat(sampleValue) === "number") {
+            columnTypes[column] = "numeric";
+        } else {
+            columnTypes[column] = "categorical";
+        }
+    });
+
+    return columnTypes;
+}
+
+function splitDataByType(data = [{}, {}], columnTypes = [{}, {}]) {
+    const numericData = data.map(row =>
+        Object.keys(row)
+            .filter(key => columnTypes[key] === "numeric")
+            .map(key => parseFloat(row[key]))
+    );
+
+    const categoricalData = data.map(row =>
+        Object.keys(row)
+            .filter(key => columnTypes[key] === "categorical")
+            .map(key => row[key])
+    );
+
+    // return {numericData[{}, {}], categoricalData[{}, {}]}
+
+    return { numericData, categoricalData };
+}
+
+export { getColumnNames, detectColumnType, splitDataByType }

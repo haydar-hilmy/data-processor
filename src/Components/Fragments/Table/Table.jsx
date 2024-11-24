@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 
 const MainTable = (props) => {
-    const { tbody = [{}, {}], thead = [], infoText = "" } = props
+    const { tbody = [{}, {}], thead = [], infoText = "", isLimitDataShow = false } = props
     const scrollTableRef = useRef(null);
     const [limitData, setLimitData] = useState(20)
     const [dataCount, setDataCount] = useState("")
@@ -25,9 +25,11 @@ const MainTable = (props) => {
 
 
     return (
-        <>
+        <div className="flex flex-col gap-2">
             <span className='text-sm text-gray-500 mt-1'>
-                {limitData.toLocaleString('id-ID')} / {tbody.length.toLocaleString('id-ID')} <br />
+                {
+                    isLimitDataShow ? 
+                    `${limitData.toLocaleString('id-ID')} / ${tbody.length.toLocaleString('id-ID')}` : ""} <br />
                 {infoText != "" ? `${infoText}` : ""}
             </span>
 
@@ -62,7 +64,7 @@ const MainTable = (props) => {
                     </tbody>
                 </table>
             </div>
-        </>
+        </div>
     );
 }
 

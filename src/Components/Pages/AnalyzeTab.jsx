@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import Header from "../Fragments/Header/Header"
 import { CircleLoading } from "../Elements/LoadingAsset/CircleLoading"
-import { useCallback, useState, useEffect } from "react"
+import { useCallback, useState, useEffect, useRef } from "react"
 import debounce from "lodash.debounce"
 import { DataGet } from "../../Function/DBDataset"
 import DatasetItemList from "../Elements/DatasetCard/DatasetItemList"
@@ -16,6 +16,8 @@ const AnalyzeTab = () => {
     const [tempDatasets, setTempDatasets] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [dataUpdated, setDataUpdated] = useState(false)
+    const [querySearch, setQuerySearch] = useState("")
+    const searchRef = useRef(null)
 
     useEffect(() => {
         DataGet().then((result) => {
@@ -28,6 +30,12 @@ const AnalyzeTab = () => {
 
     }, [dataUpdated]);
 
+    useEffect(() => {
+        if (searchRef.current) {
+            searchRef.current.focus(); // Pastikan fokus tetap pada input
+        }
+    });
+
     const handleSearch = useCallback(debounce((query) => {
         const filteredData = getDatasets.filter(item =>
             item.name.toLowerCase().includes(query.toLowerCase().trim())
@@ -37,7 +45,12 @@ const AnalyzeTab = () => {
 
     const onInputSearch = (event) => {
         const query = event.target.value
+        setQuerySearch(query)
         handleSearch(query)
+    }
+
+    const handleSearchFocus = () => {
+        if (searchRef.current) searchRef.current.focus();
     }
 
     return (
@@ -45,7 +58,12 @@ const AnalyzeTab = () => {
             <Header headerText={`Analyze Dataset`}>
                 <CircleLoading isLoading={isLoading} />
                 <MainInput
-                   placeholder="Search Dataset" oninput={onInputSearch} style={{ flex: 0.6 }} />
+                    value={querySearch}
+                    onfocus={handleSearchFocus}
+                    ref={searchRef}
+                    placeholder="Search Dataset"
+                    oninput={(e) => onInputSearch(e)}
+                    style={{ flex: 0.6 }} />
             </Header>
 
             <div className="flex flex-col gap-4">

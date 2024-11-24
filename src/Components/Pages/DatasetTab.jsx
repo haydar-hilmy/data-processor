@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import DatasetItemList from "../Elements/DatasetCard/DatasetItemList"
 import Header from "../Fragments/Header/Header"
 import MainLayout from "../Layouts/MainLayout"
@@ -19,6 +19,8 @@ const DatasetTab = () => {
     const [dataUpdated, setDataUpdated] = useState(false)
     const [tempDatasets, setTempDatasets] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [querySearch, setQuerySearch] = useState("")
+    const searchRef = useRef(null)
 
     useEffect(() => {
         DataGet().then((result) => {
@@ -31,16 +33,27 @@ const DatasetTab = () => {
 
     }, [dataUpdated]);
 
-    const handleSearch = useCallback(debounce((query) => {
+    useEffect(() => {
+        if (searchRef.current) {
+            searchRef.current.focus(); // Pastikan fokus tetap pada input
+        }
+    });
+
+    const handleSearch = useCallback(debounce((qry) => {
         const filteredData = getDatasets.filter(item =>
-            item.name.toLowerCase().includes(query.toLowerCase().trim())
+            item.name.toLowerCase().includes(qry.toLowerCase().trim())
         );
         setTempDatasets(filteredData); // Result
     }, 500), [getDatasets]);
 
     const onInputSearch = (event) => {
         const query = event.target.value
+        setQuerySearch(query)
         handleSearch(query)
+    }
+
+    const handleFocusSearch = () => {
+        if (searchRef.current) searchRef.current.focus();
     }
 
 
@@ -61,7 +74,12 @@ const DatasetTab = () => {
 
                 }} customButton={false} text="Upload" accept=".csv, .json" name="file" />
                 <MainInput
-                   placeholder="Search Dataset" oninput={onInputSearch} style={{ flex: 0.6 }} />
+                    ref={searchRef}
+                    value={querySearch}
+                    onfocus={handleFocusSearch}
+                    placeholder="Search Dataset"
+                    oninput={(e) => onInputSearch(e)}
+                    style={{ flex: 0.6 }} />
             </Header>
 
             <div className="flex flex-col gap-4">

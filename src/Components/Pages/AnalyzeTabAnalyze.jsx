@@ -86,6 +86,8 @@ const AnalyzeTabAnalyze = () => {
         if (searchRef.current) searchRef.current.focus();
     }
 
+    console.log(splitColumntypeMainDataset)
+
     return (
         <>
             {dataset != null ? (

@@ -19,22 +19,33 @@ function detectColumnType(data = [{}, {}]) {
     return columnTypes;
 }
 
+
 function splitDataByType(data = [{}, {}], columnTypes = [{}, {}]) {
-    const numericData = data.map(row =>
+    const numericData = data.map(row => {
+        const numericObj = {};
         Object.keys(row)
             .filter(key => columnTypes[key] === "numeric")
-            .map(key => parseFloat(row[key]))
-    );
+            .forEach(key => {
+                numericObj[key] = parseFloat(row[key]);
+            });
+        return numericObj;
+    });
 
-    const categoricalData = data.map(row =>
+    const categoricalData = data.map(row => {
+        const categoricalObj = {};
         Object.keys(row)
             .filter(key => columnTypes[key] === "categorical")
-            .map(key => row[key])
-    );
+            .forEach(key => {
+                categoricalObj[key] = row[key];
+            });
+        return categoricalObj;
+    });
 
-    // return {numericData[{}, {}], categoricalData[{}, {}]}
-
-    return { numericData, categoricalData };
+    return {
+        numericalData: numericData,
+        categoricalData: categoricalData
+    };
 }
+
 
 export { getColumnNames, detectColumnType, splitDataByType }

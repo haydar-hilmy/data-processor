@@ -9,12 +9,13 @@ import { MainTable } from "../Fragments/Table/Table"
 import { detectColumnType, getColumnNames, splitDataByType } from "../../Function/TableFunction"
 import DropDown from "../Elements/LabeledInput/DropDown"
 import ButtonMain from "../Elements/Button/Button"
-import { Analytics } from "@mui/icons-material"
+import { Analytics, BubbleChart, Category, Timeline } from "@mui/icons-material"
 import SubNav from "../Fragments/SubNav/SubNav"
 import LabeledInput from "../Elements/LabeledInput/LabeledInput"
 import LabeledInputWrap from "../Elements/LabeledInput/LabeledInputWrap"
 import Label from "../Elements/LabeledInput/Label"
 import { BarChart, DoughnutChart } from "../Elements/Chart/Charts"
+import CardRadioBtn from "../Elements/Radio/CardRadioBtn"
 
 const AnalyzeTabAnalyze = () => {
 
@@ -24,7 +25,7 @@ const AnalyzeTabAnalyze = () => {
     const [tbodyMainDataset, setTbodyMaindataset] = useState([])
     const [filterSearch, setFilterSearch] = useState("")
     const [tipsText, setTipsText] = useState("")
-    const [subTab, setSubTab] = useState("menu")
+    const [subTab, setSubTab] = useState("dataset")
     const searchRef = useRef(null)
     const [searchQuery, setSearchQuery] = useState("")
 
@@ -90,6 +91,8 @@ const AnalyzeTabAnalyze = () => {
         if (searchRef.current) searchRef.current.focus();
     }
 
+    console.log(analyzeMethod)
+
 
     return (
         <>
@@ -132,18 +135,47 @@ const AnalyzeTabAnalyze = () => {
                         ) :
                             subTab == "setup" ? (
                                 <div className="mt-4">
-                                    <h1 className="text-2xl">Setup Analysis</h1>
-                                    <DropDown value={analyzeMethod} name="analyzeMethod" onchange={(e) => setAnalyzeMethod(e)} text="Select a method" label="Analyze Method" data={["Regression", "Classification", "Clustering"]} />
 
-                                    {
-                                        analyzeMethod == "Clustering" ? (
-                                            <>
-                                                <MainInput min={1} type="number" placeholder="Cluster Amount" />
-                                            </>
-                                        ) : ""
-                                    }
+                                    <div className="mt-3">
+                                        <h1 className="text-xl mb-2">Choose a Method</h1>
+                                        <div className="flex flex-col sm:flex-row gap-2 justify-stretch">
+                                            <CardRadioBtn
+                                                name="AnalyzeMethod"
+                                                data={[
+                                                    {
+                                                        text: "Classification",
+                                                        infoText: "A method to predict categories or labels based on existing patterns. Ideal for tasks like spam detection or facial recognition.",
+                                                        id: "classification",
+                                                        value: "classification",
+                                                        icon: <Category />,
+                                                        onchange: (e) => console.log(e.target.value)
+                                                    },
+                                                    {
+                                                        text: "Regression",
+                                                        infoText: "A method to predict continuous values like prices, sales,or temperatures based on variable relationships.",
+                                                        id: "regression",
+                                                        value: "regression",
+                                                        icon: <Timeline />
+                                                    },
+                                                    {
+                                                        text: "Clustering",
+                                                        infoText: "A method to group similar data points into clusters based on similarity. Useful for customer segmentation or pattern analysis.",
+                                                        id: "clustering",
+                                                        value: "clustering",
+                                                        icon: <BubbleChart />
+                                                    },
+                                                ]}
+                                            />
+                                        </div>
+                                    </div>
 
-                                    <DropDown value={analyzeMethod} name="analyzeMethod" onchange={(e) => setAnalyzeMethod(e)} text="Select a method" label="Analyze Method" data={["Regression", "Classification", "Clustering"]} />
+                                    <div className="mt-3">
+                                        <h1 className="text-xl mb-2">Analyze Parameter</h1>
+                                        {
+
+                                        }
+                                    </div>
+
                                 </div>
                             ) : subTab == "analysis" ? (
                                 <>

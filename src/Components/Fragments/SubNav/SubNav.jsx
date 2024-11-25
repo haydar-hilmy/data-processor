@@ -14,7 +14,8 @@ div.linkSubNav{
     transition: opacity 0.15s;
     cursor: pointer;
     user-select: none;
-    font-weight: normal;
+    font-weight: 400;
+    font-size: 0.9rem;
 }
 div.activeLinkSubNav{
     border-bottom-width: 2px;

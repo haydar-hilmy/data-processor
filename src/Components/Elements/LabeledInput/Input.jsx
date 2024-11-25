@@ -15,6 +15,8 @@ const MainInput = React.forwardRef((props, ref) => {
         style ,
         type,
         maxlength,
+        max,
+        min
         } = props
 
     return (
@@ -33,6 +35,8 @@ const MainInput = React.forwardRef((props, ref) => {
         onSubmit={onsubmit}
         onKeyDown={onkeydown}
         onFocus={onfocus}
+        max={max}
+        min={min}
         />
     )
 })

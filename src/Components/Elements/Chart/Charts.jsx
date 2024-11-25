@@ -36,7 +36,8 @@ const BarChart = () => {
   );
 };
 
-const DoughnutChart = () => {
+const DoughnutChart = (props) => {
+  // const { data } = props
   // Data untuk grafik
   const data = {
     labels: ['Cluster 1', 'Cluster 2', 'Cluster 3'],

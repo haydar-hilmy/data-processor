@@ -30,6 +30,8 @@ const AnalyzeTabAnalyze = () => {
 
     const [typeMainDataset, setTypeMainDataset] = useState(null)
 
+    const [analyzeMethod, setAnalyzeMethod] = useState('')
+
     const { iddataset } = useParams()
 
     useEffect(() => {
@@ -110,8 +112,8 @@ const AnalyzeTabAnalyze = () => {
                             <div onClick={() => handleClickSubTab("dataset")} className={`${subTab == "dataset" ? "activeLinkSubNav" : ""} linkSubNav`}>
                                 Dataset
                             </div>
-                            <div onClick={() => handleClickSubTab("menu")} className={`${subTab == "menu" ? "activeLinkSubNav" : ""} linkSubNav`}>
-                                Menu
+                            <div onClick={() => handleClickSubTab("setup")} className={`${subTab == "setup" ? "activeLinkSubNav" : ""} linkSubNav`}>
+                                Setup
                             </div>
                             <div onClick={() => handleClickSubTab("analysis")} className={`${subTab == "analysis" ? "activeLinkSubNav" : ""} linkSubNav`}>
                                 Analysis
@@ -128,13 +130,20 @@ const AnalyzeTabAnalyze = () => {
                                 <MainTable tbody={tbodyMainDataset} thead={theadMainDataset} isLimitDataShow={true} />
                             </>
                         ) :
-                            subTab == "menu" ? (
+                            subTab == "setup" ? (
                                 <div className="mt-4">
-                                    <h1 className="text-2xl">Configure Analysis</h1>
-                                    <LabeledInputWrap>
-                                        <DropDown label="Analyze Method" data={["Regression", "Classification", "Clustering"]} />
+                                    <h1 className="text-2xl">Setup Analysis</h1>
+                                    <DropDown value={analyzeMethod} name="analyzeMethod" onchange={(e) => setAnalyzeMethod(e)} text="Select a method" label="Analyze Method" data={["Regression", "Classification", "Clustering"]} />
 
-                                    </LabeledInputWrap>
+                                    {
+                                        analyzeMethod == "Clustering" ? (
+                                            <>
+                                                <MainInput min={1} type="number" placeholder="Cluster Amount" />
+                                            </>
+                                        ) : ""
+                                    }
+
+                                    <DropDown value={analyzeMethod} name="analyzeMethod" onchange={(e) => setAnalyzeMethod(e)} text="Select a method" label="Analyze Method" data={["Regression", "Classification", "Clustering"]} />
                                 </div>
                             ) : subTab == "analysis" ? (
                                 <>

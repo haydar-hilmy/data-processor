@@ -4,7 +4,7 @@ import Label from "./Label";
 
 const DropDown = (props) => {
     const { data = [], name, text, variant, onchange = () => {}, value, tipsText = "", label = "" } = props
-    
+
     const StyledSelect = styled.select`
     max-width: 250px;
     word-break: break-all;
@@ -63,7 +63,7 @@ const DropDown = (props) => {
                     <Label variant="ml-3 text-md opacity-60 font-normal" text={label} name={name} />
                 ) : ""
             }
-            <StyledSelect value={value} onChange={(event) => onchange(event.target.value)} id={name} className={`${variant} py-2 px-5 rounded-md outline-none duration-100 border border-transparent w-auto focus:border-blue-700 bg-secondary-dark cursor-pointer`}>
+            <StyledSelect value={value} onChange={(event) => onchange(event.target.value)} id={name} className={`${variant} py-2 px-3 rounded-md outline-none duration-100 border border-transparent w-auto focus:border-blue-700 bg-secondary-dark cursor-pointer`}>
                 {data.length > 0 ? (
                     <option disabled value="" className="font-bold">{text}</option>
                 ) : (

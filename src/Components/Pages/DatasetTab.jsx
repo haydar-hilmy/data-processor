@@ -35,7 +35,7 @@ const DatasetTab = () => {
 
     useEffect(() => {
         if (searchRef.current) {
-            searchRef.current.focus(); // Pastikan fokus tetap pada input
+        searchRef.current.focus(); // Pastikan fokus tetap pada input
         }
     });
 

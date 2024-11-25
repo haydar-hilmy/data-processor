@@ -1,8 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
+import Label from "./Label";
 
 const DropDown = (props) => {
-    const { data = [], name, text, variant, onchange = () => {}, value, tipsText = "" } = props
+    const { data = [], name, text, variant, onchange = () => {}, value, tipsText = "", label = "" } = props
     
     const StyledSelect = styled.select`
     max-width: 250px;
@@ -51,11 +52,16 @@ const DropDown = (props) => {
     
 
     return (
-        <StyledSelectWrap>
+        <StyledSelectWrap className="flex flex-col gap-1 my-2">
             {
                 tipsText != "" ?
                 <span className="tooltiptext">{tipsText}</span>
                 : ""
+            }
+            {
+                label != "" ? (
+                    <Label variant="ml-3 text-md opacity-60 font-normal" text={label} name={name} />
+                ) : ""
             }
             <StyledSelect value={value} onChange={(event) => onchange(event.target.value)} id={name} className={`${variant} py-2 px-5 rounded-md outline-none duration-100 border border-transparent w-auto focus:border-blue-700 bg-secondary-dark cursor-pointer`}>
                 {data.length > 0 ? (

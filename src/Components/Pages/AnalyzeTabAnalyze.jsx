@@ -13,6 +13,8 @@ import { Analytics } from "@mui/icons-material"
 import SubNav from "../Fragments/SubNav/SubNav"
 import LabeledInput from "../Elements/LabeledInput/LabeledInput"
 import LabeledInputWrap from "../Elements/LabeledInput/LabeledInputWrap"
+import Label from "../Elements/LabeledInput/Label"
+import { BarChart, DoughnutChart } from "../Elements/Chart/Charts"
 
 const AnalyzeTabAnalyze = () => {
 
@@ -26,7 +28,7 @@ const AnalyzeTabAnalyze = () => {
     const searchRef = useRef(null)
     const [searchQuery, setSearchQuery] = useState("")
 
-    const [splitColumntypeMainDataset, setSplitColumntypeMainDataset] = useState(null)
+    const [typeMainDataset, setTypeMainDataset] = useState(null)
 
     const { iddataset } = useParams()
 
@@ -37,7 +39,7 @@ const AnalyzeTabAnalyze = () => {
             setIsLoading(false);
             setTheadMainDataset(getColumnNames(result.data))
             setTbodyMaindataset(result.data)
-            setSplitColumntypeMainDataset(splitDataByType(result.data, detectColumnType(result.data)))
+            setTypeMainDataset(splitDataByType(result.data, detectColumnType(result.data)))
         }).catch(err => {
             console.error(err);
         });
@@ -86,7 +88,6 @@ const AnalyzeTabAnalyze = () => {
         if (searchRef.current) searchRef.current.focus();
     }
 
-    console.log(splitColumntypeMainDataset)
 
     return (
         <>
@@ -105,8 +106,10 @@ const AnalyzeTabAnalyze = () => {
                         <DropDown tipsText={tipsText} value={filterSearch} name="filter_search" onchange={(value) => handleFilter(value)} data={theadMainDataset} text="Filter by column" />
                     </Header>
                     <div className="flex flex-col gap-4">
-                        <MainTable tbody={tbodyMainDataset} thead={theadMainDataset} isLimitDataShow={true} />
                         <SubNav>
+                            <div onClick={() => handleClickSubTab("dataset")} className={`${subTab == "dataset" ? "activeLinkSubNav" : ""} linkSubNav`}>
+                                Dataset
+                            </div>
                             <div onClick={() => handleClickSubTab("menu")} className={`${subTab == "menu" ? "activeLinkSubNav" : ""} linkSubNav`}>
                                 Menu
                             </div>
@@ -120,26 +123,36 @@ const AnalyzeTabAnalyze = () => {
                     </div>
 
                     {
-                        subTab == "menu" ? (
+                        subTab == "dataset" ? (
                             <>
-                                <LabeledInputWrap>
-                                    <DropDown data={["Linear Regression", "Clustering"]} />
-                                </LabeledInputWrap>
+                                <MainTable tbody={tbodyMainDataset} thead={theadMainDataset} isLimitDataShow={true} />
                             </>
-                        ) : subTab == "analysis" ? (
-                            <>
-                                <div className="flex flex-col md:flex-row gap-3">
-                                    <div style={{ flex: 1, width: '45%' }}>
-                                        <MainTable infoText="Categorical" tbody={tbodyMainDataset} thead={theadMainDataset} />
-                                    </div>
-                                    <div style={{ flex: 1, width: '45%' }}>
-                                        <MainTable infoText="Numerical" tbody={tbodyMainDataset} thead={theadMainDataset} />
-                                    </div>
+                        ) :
+                            subTab == "menu" ? (
+                                <div className="mt-4">
+                                    <h1 className="text-2xl">Configure Analysis</h1>
+                                    <LabeledInputWrap>
+                                        <DropDown label="Analyze Method" data={["Regression", "Classification", "Clustering"]} />
+
+                                    </LabeledInputWrap>
                                 </div>
-                            </>
-                        ) : subTab == "result" ? (
-                            "Result Tab"
-                        ) : ("")
+                            ) : subTab == "analysis" ? (
+                                <>
+                                    <div className="flex flex-col md:flex-row gap-3">
+                                        <div style={{ flex: 1, width: '45%' }}>
+                                            <MainTable infoText="Categorical" tbody={typeMainDataset.categoricalData} thead={getColumnNames(typeMainDataset.categoricalData)} />
+                                        </div>
+                                        <div style={{ flex: 1, width: '45%' }}>
+                                            <MainTable infoText="Numerical" tbody={typeMainDataset.numericalData} thead={getColumnNames(typeMainDataset.numericalData)} />
+                                        </div>
+                                    </div>
+                                </>
+                            ) : subTab == "result" ? (
+                                <>
+                                    <BarChart />
+                                    <DoughnutChart />
+                                </>
+                            ) : ("")
                     }
 
                 </>

@@ -5,10 +5,13 @@ import Header from "../Fragments/Header/Header"
 import MainLayout from "../Layouts/MainLayout"
 import { DBGetUser } from "../../Function/DBUser"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const Dashboard = () => {
 
     const [UserData, setUserData] = useState({name: "..."})
+
+    const navigate = useNavigate()
     
     useEffect(() => {
         const fetchUserData = async () => {
@@ -27,7 +30,7 @@ const Dashboard = () => {
         <>
             <Header headerText={`Welcome, ${UserData.name}`}>
                 <ButtonFile text="Upload" name="file" accept=".csv, .json" customButton={false} />
-                <ButtonMain variant="bg-btn-special"><Analytics/> Analyze</ButtonMain>
+                <ButtonMain variant="bg-btn-special" onclick={() => navigate('/analyze')}><Analytics/> Analyze</ButtonMain>
             </Header>
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Modi quisquam rerum quam perferendis sit exercitationem corrupti doloribus nulla numquam similique, nisi, nobis, maiores est aliquam debitis quo autem impedit doloremque?
             Vero praesentium ab sequi quam eius error eos? Similique voluptatum doloremque excepturi ea dolorum aperiam, sequi libero veritatis eum blanditiis error placeat minus ratione. Natus sapiente laudantium ipsam nisi cum?

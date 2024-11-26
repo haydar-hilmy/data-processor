@@ -21,8 +21,8 @@ const CardRadioBtn = (props) => {
           <input
             onChange={(e) => {
               handleChange(item.value)
-              if (item.onchange) {
-                item.onchange(e)
+              if (typeof item.onchange === "function") {
+                item.onchange(e.target.value)
               }
             }}
             id={item.id}
@@ -37,9 +37,9 @@ const CardRadioBtn = (props) => {
               htmlFor={item.id}
               className={`${variant} cursor-pointer`}
             >
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1 select-none">
                 <span className="font-bold text-lg">{item.text} {item.icon}</span>
-                <span className="font-normal text-sm text-justify">{item.infoText}</span>
+                <span style={{ wordSpacing: "1px" }} className="font-normal text-sm text-justify">{item.infoText}</span>
               </div>
             </label>
           </div>

@@ -78,7 +78,6 @@ const myRouter = createBrowserRouter([
 ]);
 
 const App = () => {
-
   useEffect(() => {
     const handleContextMenu = (e) => {
         e.preventDefault();

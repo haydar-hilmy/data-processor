@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Label from "./Label";
 
 const DropDown = (props) => {
-    const { data = [], name, text, variant, onchange = () => {}, value, tipsText = "", label = "" } = props
+    const { data = [], name, text, variant, onchange = () => { }, value, tipsText = "", label = "", info = "", recommend = [] } = props
 
     const StyledSelect = styled.select`
     max-width: 250px;
@@ -49,31 +49,60 @@ const DropDown = (props) => {
     }
 
     `
-    
+
 
     return (
-        <StyledSelectWrap className="flex flex-col gap-1 my-2">
-            {
-                tipsText != "" ?
-                <span className="tooltiptext">{tipsText}</span>
-                : ""
-            }
-            {
-                label != "" ? (
-                    <Label variant="ml-3 text-md opacity-60 font-normal" text={label} name={name} />
-                ) : ""
-            }
-            <StyledSelect value={value} onChange={(event) => onchange(event.target.value)} id={name} className={`${variant} py-2 px-3 rounded-md outline-none duration-100 border border-transparent w-auto focus:border-blue-700 bg-secondary-dark cursor-pointer`}>
-                {data.length > 0 ? (
-                    <option disabled value="" className="font-bold">{text}</option>
-                ) : (
-                    <option value="" disabled>Undefined</option>
-                )}
-                {data.map((element, idx) => (
-                    <option value={element} key={idx}>{element}</option>
-                ))}
-            </StyledSelect>
-        </StyledSelectWrap>
+        <>
+            <StyledSelectWrap className="flex flex-col gap-1">
+                {
+                    tipsText != "" ?
+                        <span className="tooltiptext">{tipsText}</span>
+                        : ""
+                }
+                {
+                    label != "" ? (
+                        <Label variant="ml-3 text-md opacity-60 font-normal" text={label} name={name} />
+                    ) : ""
+                }
+                <StyledSelect value={value} onChange={(event) => onchange(event.target.value)} id={name} className={`${variant} py-2 px-3 rounded-md outline-none duration-100 border border-transparent w-auto focus:border-blue-700 bg-secondary-dark cursor-pointer`}>
+                    {data.length > 0 ? (
+                        <option disabled value="" className="font-bold">{text}</option>
+                    ) : (
+                        <option value="" disabled>Undefined</option>
+                    )}
+                    {data.map((element, idx) => {
+                        if (Array.isArray(recommend) && recommend.length > 0) {
+                            // Mencari rekomendasi yang cocok berdasarkan element
+                            const matchingRecommend = recommend.find(rec => rec.column === element);
+                          
+                            // Tentukan apakah ini kolom yang direkomendasikan
+                            const isBest = matchingRecommend !== undefined;
+                            const displayText = isBest ? `${element} (for ${matchingRecommend.type == "Numerical"? "Regression" : matchingRecommend.type == "Categorical" ? "Classification" : ""})` : element;
+                          
+                            return (
+                              <option
+                                title={isBest ? `${matchingRecommend.type} Label for ${matchingRecommend.type == "Numerical"? "Regression" : matchingRecommend.type == "Categorical" ? "Classification" : ""}` : ''}
+                                value={element}
+                                key={idx}
+                              >
+                                {displayText}
+                              </option>
+                            );
+                          }
+                           else {
+                            return (
+                                <option value={element} key={idx}>{element}</option>
+                            )
+                        }
+                    })}
+                </StyledSelect>
+                {
+                    info != "" ?
+                        <p className='text-sm text-gray-500 ml-3'>{info}</p>
+                        : ""
+                }
+            </StyledSelectWrap>
+        </>
     )
 }
 

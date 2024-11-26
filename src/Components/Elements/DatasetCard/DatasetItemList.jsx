@@ -104,7 +104,7 @@ const DatasetItemList = (props) => {
         <StyledItemList>
             <div onDoubleClick={onclickDataset} style={{ flex: 1, cursor: 'pointer', userSelect: "none" }} className="tooltip flex flex-col gap-1">
                 <span className="tooltiptext">{tipText}</span>
-                <h3 ref={inputRef} contentEditable={isEdit} onBlur={handleBlur} suppressContentEditableWarning={true} autoFocus={isEdit} style={{ letterSpacing: '0.02rem', wordBreak: 'break-all' }} className="text-xl font-medium w-fit">{info.name}</h3>
+                <h3 ref={inputRef} contentEditable={isEdit} onBlur={handleBlur} suppressContentEditableWarning={true} autoFocus={isEdit} style={{ letterSpacing: '0.02rem', wordBreak: 'break-all', padding: "1px 2px" }} className="text-xl font-medium w-fit">{info.name}</h3>
                 <h6 style={{ letterSpacing: '0.03rem', wordBreak: 'break-all' }} className="text-xs font-light">{info.id}</h6>
             </div>
             <div className="subOption">

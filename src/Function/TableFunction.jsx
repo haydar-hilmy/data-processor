@@ -48,4 +48,26 @@ function splitDataByType(data = [{}, {}], columnTypes = [{}, {}]) {
 }
 
 
-export { getColumnNames, detectColumnType, splitDataByType }
+const recommendLabelColumn = (data) => {
+    const columns = Object.keys(data[0]); // Mendapatkan nama kolom
+    const recommendations = [];
+  
+    columns.forEach((column) => {
+      const uniqueValues = new Set(data.map((row) => row[column])).size;
+      const isNumerical = data.every((row) => !isNaN(Number(row[column])));
+  
+      // Rekomendasi untuk klasifikasi
+      if (uniqueValues < 20 && !isNumerical) {
+        recommendations.push({ column, type: 'Categorical', reason: 'Low unique values' });
+      }
+  
+      // Rekomendasi untuk regresi
+      if (isNumerical && uniqueValues > 20) {
+        recommendations.push({ column, type: 'Numerical', reason: 'Continuous values' });
+      }
+    });
+  
+    return recommendations;
+  };
+
+export { getColumnNames, detectColumnType, splitDataByType, recommendLabelColumn }

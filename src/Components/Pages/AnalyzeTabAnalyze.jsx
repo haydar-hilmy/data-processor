@@ -6,7 +6,7 @@ import MainInput from "../Elements/LabeledInput/Input"
 import { useParams } from 'react-router-dom';
 import { DataGet, findRecord } from "../../Function/DBDataset"
 import { MainTable } from "../Fragments/Table/Table"
-import { detectColumnType, getColumnNames, splitDataByType } from "../../Function/TableFunction"
+import { detectColumnType, getColumnNames, recommendLabelColumn, splitDataByType } from "../../Function/TableFunction"
 import DropDown from "../Elements/LabeledInput/DropDown"
 import ButtonMain from "../Elements/Button/Button"
 import { Analytics, BubbleChart, Category, Timeline } from "@mui/icons-material"
@@ -25,13 +25,22 @@ const AnalyzeTabAnalyze = () => {
     const [tbodyMainDataset, setTbodyMaindataset] = useState([])
     const [filterSearch, setFilterSearch] = useState("")
     const [tipsText, setTipsText] = useState("")
-    const [subTab, setSubTab] = useState("dataset")
+    const [subTab, setSubTab] = useState("setup")
     const searchRef = useRef(null)
     const [searchQuery, setSearchQuery] = useState("")
 
     const [typeMainDataset, setTypeMainDataset] = useState(null)
 
+    // ------- SETUP --------
+    // Choose a Method
     const [analyzeMethod, setAnalyzeMethod] = useState('')
+
+    // ANALYSIS PARAMETER
+    const [labelAnalysis, setLabelAnalysis] = useState('')
+    const [recommendLabel, setRecommendLabel] = useState([])
+    const [clfAlg, setClfAlg] = useState('') // Classification Algoritma
+    const [regAlg, setRegAlg] = useState('') // Classification Algoritma
+    const [clusAlg, setClusAlg] = useState('') // Clustering Algoritma
 
     const { iddataset } = useParams()
 
@@ -43,6 +52,8 @@ const AnalyzeTabAnalyze = () => {
             setTheadMainDataset(getColumnNames(result.data))
             setTbodyMaindataset(result.data)
             setTypeMainDataset(splitDataByType(result.data, detectColumnType(result.data)))
+            setRecommendLabel(recommendLabelColumn(result.data))
+
         }).catch(err => {
             console.error(err);
         });
@@ -53,6 +64,7 @@ const AnalyzeTabAnalyze = () => {
             searchRef.current.focus(); // Pastikan fokus tetap pada input
         }
     });
+
 
     const handleSearch = useCallback(debounce((query) => {
         setIsLoading(true)
@@ -91,8 +103,6 @@ const AnalyzeTabAnalyze = () => {
         if (searchRef.current) searchRef.current.focus();
     }
 
-    console.log(analyzeMethod)
-
 
     return (
         <>
@@ -112,11 +122,11 @@ const AnalyzeTabAnalyze = () => {
                     </Header>
                     <div className="flex flex-col gap-4">
                         <SubNav>
-                            <div onClick={() => handleClickSubTab("dataset")} className={`${subTab == "dataset" ? "activeLinkSubNav" : ""} linkSubNav`}>
-                                Dataset
-                            </div>
                             <div onClick={() => handleClickSubTab("setup")} className={`${subTab == "setup" ? "activeLinkSubNav" : ""} linkSubNav`}>
                                 Setup
+                            </div>
+                            <div onClick={() => handleClickSubTab("dataset")} className={`${subTab == "dataset" ? "activeLinkSubNav" : ""} linkSubNav`}>
+                                Dataset
                             </div>
                             <div onClick={() => handleClickSubTab("analysis")} className={`${subTab == "analysis" ? "activeLinkSubNav" : ""} linkSubNav`}>
                                 Analysis
@@ -148,21 +158,23 @@ const AnalyzeTabAnalyze = () => {
                                                         id: "classification",
                                                         value: "classification",
                                                         icon: <Category />,
-                                                        onchange: (e) => console.log(e.target.value)
+                                                        onchange: (value) => setAnalyzeMethod(value)
                                                     },
                                                     {
                                                         text: "Regression",
                                                         infoText: "A method to predict continuous values like prices, sales,or temperatures based on variable relationships.",
                                                         id: "regression",
                                                         value: "regression",
-                                                        icon: <Timeline />
+                                                        icon: <Timeline />,
+                                                        onchange: (value) => setAnalyzeMethod(value)
                                                     },
                                                     {
                                                         text: "Clustering",
                                                         infoText: "A method to group similar data points into clusters based on similarity. Useful for customer segmentation or pattern analysis.",
                                                         id: "clustering",
                                                         value: "clustering",
-                                                        icon: <BubbleChart />
+                                                        icon: <BubbleChart />,
+                                                        onchange: (value) => setAnalyzeMethod(value)
                                                     },
                                                 ]}
                                             />
@@ -170,9 +182,31 @@ const AnalyzeTabAnalyze = () => {
                                     </div>
 
                                     <div className="mt-3">
-                                        <h1 className="text-xl mb-2">Analyze Parameter</h1>
+                                        <h1 className="text-xl mb-4">Analyze Parameter</h1>
                                         {
-
+                                            analyzeMethod == "classification" ? (
+                                                <>
+                                                    <DropDown label="Select the Target Label" value={labelAnalysis} name="classification_label" onchange={(value) => setLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
+                                                    <div className="mt-4 flex flex-row items-start gap-4">
+                                                        <DropDown label="Select Algorithm" value={clfAlg} name="classfication_alg" onchange={(value) => setClfAlg(value)} data={["KNN", "Decision Tree", "Random Forest"]} text="Choose an Algorithm" />
+                                                        {
+                                                            clfAlg == "KNN" ? (
+                                                                <>
+                                                                    <LabeledInput min={1} name="kvalue" type="number" placeholder="Enter K value" text="Number of Neighbors (K)" />
+                                                                </>
+                                                            ) : ""
+                                                        }
+                                                    </div>
+                                                </>
+                                            ) : analyzeMethod == "regression" ? (
+                                                <>
+                                                    <DropDown info="Select the Target Label" value={labelAnalysis} name="label_regression" onchange={(value) => setLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
+                                                </>
+                                            ) : analyzeMethod == "clustering" ? (
+                                                <>
+                                                    Clustering
+                                                </>
+                                            ) : ""
                                         }
                                     </div>
 

@@ -1,16 +1,17 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 
-const CardRadioBtn = (props) => {
+const CardRadioBtn = React.memo((props) => {
   const { data = [], variant, name } = props;
 
   const [selectedValue, setSelectedValue] = useState(null);
 
+  
   const handleChange = (value) => {
     setSelectedValue(value);
     const selectedItem = data.find(item => item.value === value);
-    if (selectedItem && selectedItem.onchange) {
-      selectedItem.onchange(); // Panggil fungsi `onchange` dari item
+    if (selectedItem && selectedItem.onclick) {
+      selectedItem.onclick(); // Panggil fungsi `onclick` dari item
     }
   };
 
@@ -21,8 +22,8 @@ const CardRadioBtn = (props) => {
           <input
             onChange={(e) => {
               handleChange(item.value)
-              if (typeof item.onchange === "function") {
-                item.onchange(e.target.value)
+              if (typeof item.onclick === "function") {
+                item.onclick(e.target.value)
               }
             }}
             id={item.id}
@@ -47,6 +48,6 @@ const CardRadioBtn = (props) => {
       ))}
     </>
   );
-};
+});
 
 export default CardRadioBtn

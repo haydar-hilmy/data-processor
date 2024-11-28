@@ -23,11 +23,8 @@ const AnalyzeTabAnalyze = () => {
     const [dataset, setDatasets] = useState(null)
     const [theadMainDataset, setTheadMainDataset] = useState([])
     const [tbodyMainDataset, setTbodyMaindataset] = useState([])
-    const [filterSearch, setFilterSearch] = useState("")
     const [tipsText, setTipsText] = useState("")
     const [subTab, setSubTab] = useState("setup")
-    const searchRef = useRef(null)
-    const [searchQuery, setSearchQuery] = useState("")
 
     const [typeMainDataset, setTypeMainDataset] = useState(null)
 
@@ -59,49 +56,11 @@ const AnalyzeTabAnalyze = () => {
         });
     }, [iddataset])
 
-    useEffect(() => {
-        if (searchRef.current) {
-            searchRef.current.focus(); // Pastikan fokus tetap pada input
-        }
-    });
-
-
-    const handleSearch = useCallback(debounce((query) => {
-        setIsLoading(true)
-        if (query != "") {
-            setIsLoading(false)
-            setTbodyMaindataset(findRecord(query, filterSearch, dataset.data))
-        } else {
-            setIsLoading(false)
-            setTbodyMaindataset(dataset.data)
-        }
-
-        if (filterSearch == null || filterSearch == "") {
-            setTipsText("Enter a filter value")
-        } else {
-            setTipsText("")
-        }
-
-    }, 500), [filterSearch, dataset]);
-
-    const onInputSearch = (event) => {
-        const query = event.target.value
-        setSearchQuery(query)
-        handleSearch(query)
-    }
-
-    const handleFilter = (value) => {
-        setFilterSearch(value)
-        setTipsText("")
-    }
 
     const handleClickSubTab = (tab) => {
         setSubTab(tab)
     }
 
-    const handleFocusSearch = () => {
-        if (searchRef.current) searchRef.current.focus();
-    }
 
 
     return (
@@ -110,15 +69,6 @@ const AnalyzeTabAnalyze = () => {
                 <>
                     <Header headerText="Data Processing and Analysis" infoText={`${dataset.name} | ${dataset.data.length > 1 ? `${dataset.data.length.toLocaleString('id-ID')} records` : `${dataset.data.length} record`}`}>
                         <CircleLoading isLoading={isLoading} />
-                        <MainInput
-                            ref={searchRef}
-                            value={searchQuery}
-                            placeholder="Search data records..."
-                            onfocus={handleFocusSearch}
-                            oninput={(e) => onInputSearch(e)}
-                            style={{ flex: 0.6 }}
-                        />
-                        <DropDown tipsText={tipsText} value={filterSearch} name="filter_search" onchange={(value) => handleFilter(value)} data={theadMainDataset} text="Filter by column" />
                     </Header>
                     <div className="flex flex-col gap-4">
                         <SubNav>
@@ -158,7 +108,7 @@ const AnalyzeTabAnalyze = () => {
                                                         id: "classification",
                                                         value: "classification",
                                                         icon: <Category />,
-                                                        onchange: (value) => setAnalyzeMethod(value)
+                                                        onclick: (value) => setAnalyzeMethod(value)
                                                     },
                                                     {
                                                         text: "Regression",
@@ -166,7 +116,7 @@ const AnalyzeTabAnalyze = () => {
                                                         id: "regression",
                                                         value: "regression",
                                                         icon: <Timeline />,
-                                                        onchange: (value) => setAnalyzeMethod(value)
+                                                        onclick: (value) => setAnalyzeMethod(value)
                                                     },
                                                     {
                                                         text: "Clustering",
@@ -174,7 +124,7 @@ const AnalyzeTabAnalyze = () => {
                                                         id: "clustering",
                                                         value: "clustering",
                                                         icon: <BubbleChart />,
-                                                        onchange: (value) => setAnalyzeMethod(value)
+                                                        onclick: (value) => setAnalyzeMethod(value)
                                                     },
                                                 ]}
                                             />
@@ -187,8 +137,8 @@ const AnalyzeTabAnalyze = () => {
                                             analyzeMethod == "classification" ? (
                                                 <>
                                                     <DropDown label="Select the Target Label" value={labelAnalysis} name="classification_label" onchange={(value) => setLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
-                                                    <div className="mt-4 flex flex-row items-start gap-4">
-                                                        <DropDown label="Select Algorithm" value={clfAlg} name="classfication_alg" onchange={(value) => setClfAlg(value)} data={["KNN", "Decision Tree", "Random Forest"]} text="Choose an Algorithm" />
+                                                    <div className="mt-4 flex flex-col sm:flex-row items-start gap-4">
+                                                        <DropDown label="Select Classification Algorithm" value={clfAlg} name="classfication_alg" onchange={(value) => setClfAlg(value)} data={["KNN", "Decision Tree", "Random Forest"]} text="Choose an Algorithm" />
                                                         {
                                                             clfAlg == "KNN" ? (
                                                                 <>
@@ -200,11 +150,18 @@ const AnalyzeTabAnalyze = () => {
                                                 </>
                                             ) : analyzeMethod == "regression" ? (
                                                 <>
-                                                    <DropDown info="Select the Target Label" value={labelAnalysis} name="label_regression" onchange={(value) => setLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
+                                                    <DropDown label="Select the Target Label" value={labelAnalysis} name="label_regression" onchange={(value) => setLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
+                                                    <div className="mt-4 flex items-start">
+                                                        <DropDown label="Select Regression Algorithm" value={regAlg} name="regression_alg" onchange={(value) => setRegAlg(value)} data={["Linear", "Polynomial", "Ridge"]} text="Choose an Algorithm" />
+                                                    </div>
                                                 </>
                                             ) : analyzeMethod == "clustering" ? (
                                                 <>
-                                                    Clustering
+                                                    <DropDown label="Select Clustering Algorithm" value={clusAlg} name="clustering_alg" onchange={(value) => setClusAlg(value)} data={["Hierarchical", "K-Means"]} text="Choose an Algorithm" />
+                                                    <div className="mt-4 flex flex-col sm:flex-row items-start gap-4">
+                                                        <LabeledInput min={1} name="totalClus" type="number" placeholder="Enter clusters" text="Number of Clusters" />
+                                                        <LabeledInput min={1} name="maxIterate_clus" type="number" placeholder="Enter max iterations" text="Maximum Iterations" />
+                                                    </div>
                                                 </>
                                             ) : ""
                                         }

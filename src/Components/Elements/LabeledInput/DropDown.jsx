@@ -3,7 +3,18 @@ import styled from "styled-components";
 import Label from "./Label";
 
 const DropDown = (props) => {
-    const { data = [], name, text, variant, onchange = () => { }, value, tipsText = "", label = "", info = "", recommend = [] } = props
+    const {
+        data = [],
+        name,
+        text,
+        variant,
+        onchange = () => { },
+        value,
+        tipsText = "",
+        label = "",
+        info = "",
+        recommend = [] // [{}, {}]
+    } = props
 
     const StyledSelect = styled.select`
     max-width: 250px;
@@ -74,22 +85,21 @@ const DropDown = (props) => {
                         if (Array.isArray(recommend) && recommend.length > 0) {
                             // Mencari rekomendasi yang cocok berdasarkan element
                             const matchingRecommend = recommend.find(rec => rec.column === element);
-                          
+
                             // Tentukan apakah ini kolom yang direkomendasikan
                             const isBest = matchingRecommend !== undefined;
-                            const displayText = isBest ? `${element} (for ${matchingRecommend.type == "Numerical"? "Regression" : matchingRecommend.type == "Categorical" ? "Classification" : ""})` : element;
-                          
+                            const displayText = isBest ? `${element} (for ${matchingRecommend.type == "Numerical" ? "Regression" : matchingRecommend.type == "Categorical" ? "Classification" : ""})` : element;
+
                             return (
-                              <option
-                                title={isBest ? `${matchingRecommend.type} Label for ${matchingRecommend.type == "Numerical"? "Regression" : matchingRecommend.type == "Categorical" ? "Classification" : ""}` : ''}
-                                value={element}
-                                key={idx}
-                              >
-                                {displayText}
-                              </option>
+                                <option
+                                    title={isBest ? `${matchingRecommend.type} Label for ${matchingRecommend.type == "Numerical" ? "Regression" : matchingRecommend.type == "Categorical" ? "Classification" : ""}` : ''}
+                                    value={element}
+                                    key={idx}
+                                >
+                                    {displayText}
+                                </option>
                             );
-                          }
-                           else {
+                        } else {
                             return (
                                 <option value={element} key={idx}>{element}</option>
                             )

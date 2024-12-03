@@ -9,13 +9,15 @@ import { MainTable } from "../Fragments/Table/Table"
 import { detectColumnType, getColumnNames, recommendLabelColumn, splitDataByType } from "../../Function/TableFunction"
 import DropDown from "../Elements/LabeledInput/DropDown"
 import ButtonMain from "../Elements/Button/Button"
-import { Analytics, BubbleChart, Category, Timeline } from "@mui/icons-material"
+import { Analytics, Autorenew, BubbleChart, Category, PlayArrow, Start, Timeline } from "@mui/icons-material"
 import SubNav from "../Fragments/SubNav/SubNav"
 import LabeledInput from "../Elements/LabeledInput/LabeledInput"
 import LabeledInputWrap from "../Elements/LabeledInput/LabeledInputWrap"
 import Label from "../Elements/LabeledInput/Label"
 import { BarChart, DoughnutChart } from "../Elements/Chart/Charts"
 import CardRadioBtn from "../Elements/Radio/CardRadioBtn"
+import CheckboxLabel from "../Elements/Checkbox/CheckboxLabel"
+import CheckboxLabelList from "../Elements/Checkbox/CheckboxLabelList"
 
 const AnalyzeTabAnalyze = () => {
 
@@ -135,9 +137,9 @@ const AnalyzeTabAnalyze = () => {
                                         <h1 className="text-xl mb-4">Analyze Parameter</h1>
                                         {
                                             analyzeMethod == "classification" ? (
-                                                <>
+                                                <div className="flex flex-col items-start gap-4">
                                                     <DropDown label="Select the Target Label" value={labelAnalysis} name="classification_label" onchange={(value) => setLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
-                                                    <div className="mt-4 flex flex-col sm:flex-row items-start gap-4">
+                                                    <div className="flex flex-col sm:flex-row items-start gap-4">
                                                         <DropDown label="Select Classification Algorithm" value={clfAlg} name="classfication_alg" onchange={(value) => setClfAlg(value)} data={["KNN", "Decision Tree", "Random Forest"]} text="Choose an Algorithm" />
                                                         {
                                                             clfAlg == "KNN" ? (
@@ -147,22 +149,28 @@ const AnalyzeTabAnalyze = () => {
                                                             ) : ""
                                                         }
                                                     </div>
-                                                </>
+                                                    <div>
+                                                        <CheckboxLabelList listData={theadMainDataset} recommend={recommendLabel} />
+                                                    </div>
+                                                    <ButtonMain variant="bg-btn-primary"><PlayArrow /> Process</ButtonMain>
+                                                </div>
                                             ) : analyzeMethod == "regression" ? (
-                                                <>
+                                                <div className="flex flex-col items-start gap-4">
                                                     <DropDown label="Select the Target Label" value={labelAnalysis} name="label_regression" onchange={(value) => setLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
-                                                    <div className="mt-4 flex items-start">
+                                                    <div className="flex items-start">
                                                         <DropDown label="Select Regression Algorithm" value={regAlg} name="regression_alg" onchange={(value) => setRegAlg(value)} data={["Linear", "Polynomial", "Ridge"]} text="Choose an Algorithm" />
                                                     </div>
-                                                </>
+                                                    <ButtonMain variant="bg-btn-primary"><PlayArrow /> Process</ButtonMain>
+                                                </div>
                                             ) : analyzeMethod == "clustering" ? (
-                                                <>
+                                                <div className="flex flex-col items-start gap-4">
                                                     <DropDown label="Select Clustering Algorithm" value={clusAlg} name="clustering_alg" onchange={(value) => setClusAlg(value)} data={["Hierarchical", "K-Means"]} text="Choose an Algorithm" />
-                                                    <div className="mt-4 flex flex-col sm:flex-row items-start gap-4">
+                                                    <div className="flex flex-col sm:flex-row items-start gap-4">
                                                         <LabeledInput min={1} name="totalClus" type="number" placeholder="Enter clusters" text="Number of Clusters" />
                                                         <LabeledInput min={1} name="maxIterate_clus" type="number" placeholder="Enter max iterations" text="Maximum Iterations" />
                                                     </div>
-                                                </>
+                                                    <ButtonMain variant="bg-btn-primary"><PlayArrow /> Process</ButtonMain>
+                                                </div>
                                             ) : ""
                                         }
                                     </div>

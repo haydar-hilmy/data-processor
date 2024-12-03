@@ -48,7 +48,7 @@ function splitDataByType(data = [{}, {}], columnTypes = [{}, {}]) {
 }
 
 
-const recommendLabelColumn = (data) => {
+const recommendLabelColumn = (data) => { // return [{}, {}]
     const columns = Object.keys(data[0]); // Mendapatkan nama kolom
     const recommendations = [];
   

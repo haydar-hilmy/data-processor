@@ -2,7 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 const CheckboxLabel = (props) => {
-    const { text = "", name, onchange, value, checked } = props
+  const {
+    text = "",
+    name,
+    onchange,
+    value,
+    checked,
+  } = props
+
+
   return (
     <StyledWrapper>
       <label className="material-checkbox">

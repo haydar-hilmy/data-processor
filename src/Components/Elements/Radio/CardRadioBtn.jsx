@@ -33,7 +33,7 @@ const CardRadioBtn = React.memo((props) => {
             value={item.value}
             checked={selectedValue === item.value} // Kontrol dengan state
           />
-          <div className="py-3 px-5 h-full opacity-70 cursor-pointer rounded-xl border border-[#424242] bg-secondary-dark transition-transform duration-150 hover:border-blue-800 hover:opacity-90 active:scale-95 peer-checked:border-blue-700 peer-checked:opacity-100 peer-checked:shadow-md peer-checked:shadow-blue-800">
+          <div className="py-3 px-5 h-full opacity-70 cursor-pointer rounded-xl border border-[#424242] bg-secondary-dark transition-transform duration-75 hover:border-blue-800 hover:opacity-90 active:scale-95 peer-checked:border-blue-700 peer-checked:opacity-100 peer-checked:shadow-md peer-checked:shadow-blue-800">
             <label
               htmlFor={item.id}
               className={`${variant} cursor-pointer`}

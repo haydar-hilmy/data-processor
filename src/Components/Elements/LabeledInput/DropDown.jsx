@@ -92,7 +92,7 @@ const DropDown = (props) => {
 
                             return (
                                 <option
-                                    title={isBest ? `${matchingRecommend.type} Label for ${matchingRecommend.type == "Numerical" ? "Regression" : matchingRecommend.type == "Categorical" ? "Classification" : ""}` : ''}
+                                    title={isBest ? `${matchingRecommend.type} Label for ${matchingRecommend.type == "Numerical" ? "Regression" : matchingRecommend.type == "Categorical" ? "Classification" : ""}` : 'Not recommend'}
                                     value={element}
                                     key={idx}
                                 >

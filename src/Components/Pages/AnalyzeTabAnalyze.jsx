@@ -18,6 +18,7 @@ import { BarChart, DoughnutChart } from "../Elements/Chart/Charts"
 import CardRadioBtn from "../Elements/Radio/CardRadioBtn"
 import CheckboxLabel from "../Elements/Checkbox/CheckboxLabel"
 import CheckboxLabelList from "../Elements/Checkbox/CheckboxLabelList"
+import KNNModelExample from "../../Function/TensorFlow/ProcessModel"
 
 const AnalyzeTabAnalyze = () => {
 
@@ -40,6 +41,8 @@ const AnalyzeTabAnalyze = () => {
     const [clfAlg, setClfAlg] = useState('') // Classification Algoritma
     const [regAlg, setRegAlg] = useState('') // Classification Algoritma
     const [clusAlg, setClusAlg] = useState('') // Clustering Algoritma
+    const [selectedFeatures, setSelectedFeatures] = useState([])
+    const [exceptLabel, setExceptLabel] = useState([])
 
     const { iddataset } = useParams()
 
@@ -58,11 +61,29 @@ const AnalyzeTabAnalyze = () => {
         });
     }, [iddataset])
 
+    // STARTING PROCESS
+
+    const processClf = () => {
+        console.log(`feat: ${selectedFeatures}, Alg: ${clfAlg}, Label: ${labelAnalysis}`)
+    }
+
 
     const handleClickSubTab = (tab) => {
         setSubTab(tab)
     }
 
+    const handleLabelAnalysis = (value) => {
+        setLabelAnalysis(value);
+        setExceptLabel([value]);
+    };
+
+
+    const handleFeatures = (value) => {
+        setSelectedFeatures((prev) =>
+            prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+        );
+    };
+    
 
 
     return (
@@ -92,6 +113,7 @@ const AnalyzeTabAnalyze = () => {
                     {
                         subTab == "dataset" ? (
                             <>
+                                <KNNModelExample />
                                 <MainTable tbody={tbodyMainDataset} thead={theadMainDataset} isLimitDataShow={true} />
                             </>
                         ) :
@@ -138,7 +160,7 @@ const AnalyzeTabAnalyze = () => {
                                         {
                                             analyzeMethod == "classification" ? (
                                                 <div className="flex flex-col items-start gap-4">
-                                                    <DropDown label="Select the Target Label" value={labelAnalysis} name="classification_label" onchange={(value) => setLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
+                                                    <DropDown label="Select the Target Label" value={labelAnalysis} name="classification_label" onchange={(value) => handleLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
                                                     <div className="flex flex-col sm:flex-row items-start gap-4">
                                                         <DropDown label="Select Classification Algorithm" value={clfAlg} name="classfication_alg" onchange={(value) => setClfAlg(value)} data={["KNN", "Decision Tree", "Random Forest"]} text="Choose an Algorithm" />
                                                         {
@@ -149,14 +171,14 @@ const AnalyzeTabAnalyze = () => {
                                                             ) : ""
                                                         }
                                                     </div>
-                                                    <div>
-                                                        <CheckboxLabelList listData={theadMainDataset} recommend={recommendLabel} />
+                                                    <div className="w-full">
+                                                        <CheckboxLabelList specialCheckbox={"Automatic Select Features"} text={"Select Features"} onchangeSpecial={() => setSelectedFeatures([])} onchange={(e) => handleFeatures(e.target.value)} exception={exceptLabel} listData={theadMainDataset} recommend={recommendLabel} />
                                                     </div>
-                                                    <ButtonMain variant="bg-btn-primary"><PlayArrow /> Process</ButtonMain>
+                                                    <ButtonMain variant="bg-btn-primary" onclick={() => processClf()}><PlayArrow /> Process</ButtonMain>
                                                 </div>
                                             ) : analyzeMethod == "regression" ? (
                                                 <div className="flex flex-col items-start gap-4">
-                                                    <DropDown label="Select the Target Label" value={labelAnalysis} name="label_regression" onchange={(value) => setLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
+                                                    <DropDown label="Select the Target Label" value={labelAnalysis} name="label_regression" onchange={(value) => handleLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
                                                     <div className="flex items-start">
                                                         <DropDown label="Select Regression Algorithm" value={regAlg} name="regression_alg" onchange={(value) => setRegAlg(value)} data={["Linear", "Polynomial", "Ridge"]} text="Choose an Algorithm" />
                                                     </div>

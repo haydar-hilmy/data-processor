@@ -1,11 +1,24 @@
-import decisionTree from "decision-tree";
+import { arrayToObj, sliceObj } from "../ArrObjFunction";
+import * as tf from '@tensorflow/tfjs'
+import { normalizeData } from "./DataManipulate";
 
-const sliceCol = () =>
-
-function DecisionTreeModel(trainingData = [{}], label = "", features = [""]){ // (trainingData = [{}, {}], label = "label", features = ["features1", "features2"])
-    // let dt = new decisionTree()
-
-} 
+// PROTOCOLS
+// - Send a raw dataset (include label and all features)
+// - Send a label in a String
+// - Send a features in a Array 
 
 
-export { DecisionTreeModel }
+function NeuralNetwork(trainingData = [{}, {}], label = "", features = [""]) {
+    let selectedLabelFeat = [...features];
+    selectedLabelFeat.push(label);
+
+    let normalizeTrainingData = [...trainingData]
+
+    let selectedTrainingData = sliceObj(trainingData, selectedLabelFeat)
+
+    console.log("Normalize: ", normalizeData(normalizeTrainingData))
+}
+
+
+
+export { NeuralNetwork }

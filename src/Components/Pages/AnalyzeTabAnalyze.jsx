@@ -18,7 +18,7 @@ import { BarChart, DoughnutChart } from "../Elements/Chart/Charts"
 import CardRadioBtn from "../Elements/Radio/CardRadioBtn"
 import CheckboxLabel from "../Elements/Checkbox/CheckboxLabel"
 import CheckboxLabelList from "../Elements/Checkbox/CheckboxLabelList"
-import { DecisionTreeModel } from "../../Function/TensorFlow/ProcessModel"
+import { NeuralNetwork } from "../../Function/TensorFlow/ProcessModel"
 
 const AnalyzeTabAnalyze = () => {
 
@@ -38,9 +38,9 @@ const AnalyzeTabAnalyze = () => {
     // ANALYSIS PARAMETER
     const [labelAnalysis, setLabelAnalysis] = useState('')
     const [recommendLabel, setRecommendLabel] = useState([])
-    const [clfAlg, setClfAlg] = useState('') // Classification Algoritma
-    const [regAlg, setRegAlg] = useState('') // Classification Algoritma
-    const [clusAlg, setClusAlg] = useState('') // Clustering Algoritma
+    const [clfMod, setClfMod] = useState('') // Classification Model
+    const [regMod, setRegMod] = useState('') // Regression Model
+    const [clusMod, setClusMod] = useState('') // Clustering Model
     const [selectedFeatures, setSelectedFeatures] = useState([])
     const [exceptLabel, setExceptLabel] = useState([])
 
@@ -65,13 +65,12 @@ const AnalyzeTabAnalyze = () => {
 
     ////////////// STARTING PROCESS ///////////////
     const processClf = () => {
-        if(clfAlg == "Decision Tree"){
-            // DecisionTreeModel(tbodyMainDataset,)
-            console.log(tbodyMainDataset)
+        if(clfMod == "Neural Network"){
+            NeuralNetwork(tbodyMainDataset, labelAnalysis, selectedFeatures)
         } else {
             console.log("Else")
         }
-        console.log(`feat: ${selectedFeatures}, Alg: ${clfAlg}, Label: ${labelAnalysis}`)
+        console.log(`feat: ${selectedFeatures}, Model: ${clfMod}, Label: ${labelAnalysis}`)
     }
 
 
@@ -92,6 +91,7 @@ const AnalyzeTabAnalyze = () => {
             prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
         );
     };
+    
     
 
 
@@ -170,9 +170,9 @@ const AnalyzeTabAnalyze = () => {
                                                 <div className="flex flex-col items-start gap-4">
                                                     <DropDown label="Select the Target Label" value={labelAnalysis} name="classification_label" onchange={(value) => handleLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
                                                     <div className="flex flex-col sm:flex-row items-start gap-4">
-                                                        <DropDown label="Select Classification Algorithm" value={clfAlg} name="classfication_alg" onchange={(value) => setClfAlg(value)} data={["KNN", "Decision Tree", "Random Forest"]} text="Choose an Algorithm" />
+                                                        <DropDown label="Select Classification Model" value={clfMod} name="classfication_alg" onchange={(value) => setClfMod(value)} data={["Neural Network", "Decision Tree", "Random Forest"]} text="Choose a Model" />
                                                         {
-                                                            clfAlg == "KNN" ? (
+                                                            clfMod == "KNN" ? (
                                                                 <>
                                                                     <LabeledInput min={1} name="kvalue" type="number" placeholder="Enter K value" text="Number of Neighbors (K)" />
                                                                 </>
@@ -188,13 +188,13 @@ const AnalyzeTabAnalyze = () => {
                                                 <div className="flex flex-col items-start gap-4">
                                                     <DropDown label="Select the Target Label" value={labelAnalysis} name="label_regression" onchange={(value) => handleLabelAnalysis(value)} data={theadMainDataset} recommend={recommendLabel} text="Select a label" />
                                                     <div className="flex items-start">
-                                                        <DropDown label="Select Regression Algorithm" value={regAlg} name="regression_alg" onchange={(value) => setRegAlg(value)} data={["Linear", "Polynomial", "Ridge"]} text="Choose an Algorithm" />
+                                                        <DropDown label="Select Regression Model" value={regMod} name="regression_alg" onchange={(value) => setRegMod(value)} data={["Linear", "Polynomial", "Ridge"]} text="Choose a Model" />
                                                     </div>
                                                     <ButtonMain variant="bg-btn-primary"><PlayArrow /> Process</ButtonMain>
                                                 </div>
                                             ) : analyzeMethod == "clustering" ? (
                                                 <div className="flex flex-col items-start gap-4">
-                                                    <DropDown label="Select Clustering Algorithm" value={clusAlg} name="clustering_alg" onchange={(value) => setClusAlg(value)} data={["Hierarchical", "K-Means"]} text="Choose an Algorithm" />
+                                                    <DropDown label="Select Clustering Model" value={clusMod} name="clustering_alg" onchange={(value) => setClusMod(value)} data={["Hierarchical", "K-Means"]} text="Choose a Model" />
                                                     <div className="flex flex-col sm:flex-row items-start gap-4">
                                                         <LabeledInput min={1} name="totalClus" type="number" placeholder="Enter clusters" text="Number of Clusters" />
                                                         <LabeledInput min={1} name="maxIterate_clus" type="number" placeholder="Enter max iterations" text="Maximum Iterations" />

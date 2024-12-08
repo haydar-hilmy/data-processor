@@ -18,7 +18,7 @@ import { BarChart, DoughnutChart } from "../Elements/Chart/Charts"
 import CardRadioBtn from "../Elements/Radio/CardRadioBtn"
 import CheckboxLabel from "../Elements/Checkbox/CheckboxLabel"
 import CheckboxLabelList from "../Elements/Checkbox/CheckboxLabelList"
-import KNNModelExample from "../../Function/TensorFlow/ProcessModel"
+import { DecisionTreeModel } from "../../Function/TensorFlow/ProcessModel"
 
 const AnalyzeTabAnalyze = () => {
 
@@ -61,11 +61,20 @@ const AnalyzeTabAnalyze = () => {
         });
     }, [iddataset])
 
-    // STARTING PROCESS
 
+
+    ////////////// STARTING PROCESS ///////////////
     const processClf = () => {
+        if(clfAlg == "Decision Tree"){
+            // DecisionTreeModel(tbodyMainDataset,)
+            console.log(tbodyMainDataset)
+        } else {
+            console.log("Else")
+        }
         console.log(`feat: ${selectedFeatures}, Alg: ${clfAlg}, Label: ${labelAnalysis}`)
     }
+
+
 
 
     const handleClickSubTab = (tab) => {
@@ -113,7 +122,6 @@ const AnalyzeTabAnalyze = () => {
                     {
                         subTab == "dataset" ? (
                             <>
-                                <KNNModelExample />
                                 <MainTable tbody={tbodyMainDataset} thead={theadMainDataset} isLimitDataShow={true} />
                             </>
                         ) :

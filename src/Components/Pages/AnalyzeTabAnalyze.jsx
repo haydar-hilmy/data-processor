@@ -64,7 +64,7 @@ const AnalyzeTabAnalyze = () => {
             setTbodyMaindataset(result.data)
             setTypeMainDataset(splitDataByType(result.data, detectColumnType(result.data)))
             setRecommendLabel(recommendLabelColumn(result.data))
-            setValueOfColMainDataset(valueOfColumn(getSubset(result.data, 10)))
+            setValueOfColMainDataset(valueOfColumn(getSubset(result.data, 30)))
         }).catch(err => {
             console.error(err);
         });
@@ -105,6 +105,10 @@ const AnalyzeTabAnalyze = () => {
     }, [selectedFeatures])
 
 
+    useEffect(() => {
+      console.log(testingInputs)
+    }, [testingInputs])
+    
 
 
     return (
@@ -213,24 +217,25 @@ const AnalyzeTabAnalyze = () => {
                                                                                             <LabeledInput
                                                                                                 type={"number"}
                                                                                                 info={`Suggestion: ${row[selectedFeatures[idx]].data.min} - ${row[selectedFeatures[idx]].data.max}`}
-                                                                                                value={tInp}
+                                                                                                value={tInp[selectedFeatures[idx]]}
+                                                                                                name={`${selectedFeatures[idx]}_testingCls`}
                                                                                                 placeholder={`Testing ${selectedFeatures[idx]}`}
                                                                                                 text={selectedFeatures[idx]}
                                                                                                 onchange={(e) => {
                                                                                                     const newInputs = [...testingInputs];
-                                                                                                    newInputs[idx] = e.target.value;
+                                                                                                    newInputs[idx] = { [selectedFeatures[idx]]: e.target.value};
                                                                                                     setTestingInputs(newInputs);
                                                                                                 }} />
                                                                                         ) : row[selectedFeatures[idx]].type == "categorical" ? (
                                                                                             <DropDown
-                                                                                                value={tInp}
+                                                                                                value={tInp[selectedFeatures[idx]]}
                                                                                                 label={selectedFeatures[idx]}
                                                                                                 name={`${selectedFeatures[idx]}_testingCls`}
                                                                                                 text={`Testing ${selectedFeatures[idx]}`}
                                                                                                 data={row[selectedFeatures[idx]].data}
                                                                                                 onchange={(eValue) => {
                                                                                                     const newInputs = [...testingInputs];
-                                                                                                    newInputs[idx] = eValue;
+                                                                                                    newInputs[idx] = { [selectedFeatures[idx]]: eValue};
                                                                                                     setTestingInputs(newInputs);
                                                                                                 }}
                                                                                             />

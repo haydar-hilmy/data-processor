@@ -44,6 +44,18 @@ const AnalyzeTabAnalyze = () => {
     const [selectedFeatures, setSelectedFeatures] = useState([])
     const [exceptLabel, setExceptLabel] = useState([])
 
+    const [testingInputs, setTestingInputs] = useState(selectedFeatures)
+    const addTestingInput = () => {
+        // setTestingInputs([...selectedFeatures])
+        setTestingInputs(new Array(selectedFeatures.length).fill(''));
+    }
+
+    const rmTestingInput = (idx) => {
+        const newTInp = [...testingInputs]
+        newTInp.splice(idx, 1)
+        setTestingInputs(newTInp)
+    }
+
     const { iddataset } = useParams()
 
     useEffect(() => {
@@ -65,7 +77,7 @@ const AnalyzeTabAnalyze = () => {
 
     ////////////// STARTING PROCESS ///////////////
     const processClf = () => {
-        if(clfMod == "Neural Network"){
+        if (clfMod == "Neural Network") {
             NeuralNetwork(tbodyMainDataset, labelAnalysis, selectedFeatures)
         } else {
             console.log("Else")
@@ -91,8 +103,12 @@ const AnalyzeTabAnalyze = () => {
             prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
         );
     };
-    
-    
+    useEffect(() => {
+        console.log(selectedFeatures)
+        addTestingInput()
+    }, [selectedFeatures])
+
+
 
 
     return (
@@ -181,6 +197,31 @@ const AnalyzeTabAnalyze = () => {
                                                     </div>
                                                     <div className="w-full">
                                                         <CheckboxLabelList specialCheckbox={"Automatic Select Features"} text={"Select Features"} onchangeSpecial={() => setSelectedFeatures([])} onchange={(e) => handleFeatures(e.target.value)} exception={exceptLabel} listData={theadMainDataset} recommend={recommendLabel} />
+                                                    </div>
+                                                    <div>
+                                                        {
+                                                            testingInputs && testingInputs.length > 0 && (
+                                                                <h2 className="ml-3 my-2 text-md opacity-60 font-normal">Data Testing</h2>
+                                                            )
+                                                        }
+                                                        <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-3">
+                                                            {
+                                                                testingInputs.map((tInp, idx) => (
+                                                                    <div key={idx}>
+                                                                        <LabeledInput
+                                                                            info={"Testing"}
+                                                                            value={tInp}
+                                                                            placeholder={`Input testing ${selectedFeatures[idx]}`}
+                                                                            text={selectedFeatures[idx]}
+                                                                            onchange={(e) => {
+                                                                                const newInputs = [...testingInputs];
+                                                                                newInputs[idx] = e.target.value;
+                                                                                setTestingInputs(newInputs);
+                                                                            }} />
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </div>
                                                     </div>
                                                     <ButtonMain variant="bg-btn-primary" onclick={() => processClf()}><PlayArrow /> Process</ButtonMain>
                                                 </div>

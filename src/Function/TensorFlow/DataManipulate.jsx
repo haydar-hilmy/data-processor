@@ -1,56 +1,109 @@
-function normalizeData(data = [{}, {}]) {
-    // Fungsi untuk mengubah format desimal dengan koma ke titik (untuk kolom numerik)
-    const convertToDecimal = (value) => {
-        if (typeof value === 'string') {
-            // Mengganti koma dengan titik jika ada dan konversi ke float
-            return parseFloat(value.replace(',', '.'));
+function normalizeDataset(data = [{}, {}]) {
+    // Helper function untuk mengubah string numerik dengan koma ke titik
+    const parseNumber = (val) => {
+        if (typeof val === 'string') {
+            return parseFloat(val.replace(',', '.'));
         }
-        return value;
+        return val;
     };
 
-    // Menentukan kolom-kolom yang perlu dinormalisasi
-    const cols = Object.keys(data[0]);
+    // Langkah 1: Menyusun data numerik dan kategori
+    let numericData = {};
+    let categoricalData = {};
+    let allCategories = {};
 
-    // Menyimpan min-max values untuk kolom numerik
-    const minMaxValues = cols.reduce((acc, col) => {
-        const values = data.map(item => item[col]);
+    // Pisahkan data numerik dan kategori
+    data.forEach(row => {
+        Object.keys(row).forEach(col => {
+            const value = parseNumber(row[col]);
 
-        // Jika kolom berisi angka, hitung min-max untuk normalisasi
-        if (typeof values[0] === 'number') {
-            const min = Math.min(...values);
-            const max = Math.max(...values);
-            acc[col] = { min, max, type: 'numeric' };
-        } else {
-            // Jika kolom berisi string, beri label encoding
-            const uniqueValues = [...new Set(values)];
-            acc[col] = { values: uniqueValues, type: 'string' };
-        }
+            // Cek apakah nilai adalah numerik atau kategori
+            if (!isNaN(value)) {
+                // Jika numerik, masukkan ke numericData
+                if (!numericData[col]) {
+                    numericData[col] = [];
+                }
+                numericData[col].push(value);
+            } else {
+                // Jika kategori, masukkan ke categoricalData
+                const category = row[col].toString().toLowerCase();
+                if (!categoricalData[col]) {
+                    categoricalData[col] = new Set();
+                }
+                categoricalData[col].add(category);
+            }
+        });
+    });
 
-        return acc;
-    }, {});
+    // Langkah 2: Min-Max Scaling untuk fitur numerik
+    const minMaxScaling = (values) => {
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        return values.map(value => (value - min) / (max - min));
+    };
 
-    // Melakukan normalisasi pada setiap data point
-    const normalizedData = data.map(item => {
-        const normalizedItem = {};
+    // Normalisasi kolom numerik
+    for (const col in numericData) {
+        numericData[col] = minMaxScaling(numericData[col]);
+    }
 
-        cols.forEach(col => {
-            const { type, min, max, values } = minMaxValues[col];
+    // Langkah 3: One Hot Encoding untuk fitur kategori
+    let oneHotEncodedData = data.map(row => {
+        let encodedRow = {};
 
-            if (type === 'numeric') {
-                // Normalisasi kolom numerik dengan memastikan konversi ke desimal
-                const numericValue = convertToDecimal(item[col]);
-                normalizedItem[col] = (numericValue - min) / (max - min);
-            } else if (type === 'string') {
-                // Label encoding untuk kolom string
-                normalizedItem[col] = values.indexOf(item[col]);
+        Object.keys(row).forEach(col => {
+            const value = row[col].toString().toLowerCase();
+            if (numericData[col]) {
+                // Jika kolom ini numerik, gunakan data yang sudah diskalakan
+                encodedRow[col] = numericData[col].shift(); // Ambil nilai yang sudah dinormalisasi
+            } else if (categoricalData[col]) {
+                // Jika kolom ini kategori, lakukan one-hot encoding
+                categoricalData[col].forEach(category => {
+                    encodedRow[`${col}_${category}`] = (value === category) ? 1 : 0;
+                });
+            } else {
+                // Salin nilai asli jika tidak perlu pemrosesan lebih lanjut
+                encodedRow[col] = value;
             }
         });
 
-        return normalizedItem;
+        return encodedRow;
     });
 
-    return normalizedData;
+    return oneHotEncodedData;
+}
+
+function getSubset(data, percentage = 10) {
+    // Pastikan persentase berada dalam rentang yang valid (0-100)
+    if (percentage < 0 || percentage > 100) {
+        throw new Error("Percentage must be between 0 and 100");
+    }
+
+    // Hitung jumlah record yang ingin diambil berdasarkan persentase
+    const subsetSize = Math.floor((percentage / 100) * data.length);
+    
+    // Ambil subset acak dari data
+    const shuffledData = shuffleArray([...data]); // Mengacak data secara acak
+    return shuffledData.slice(0, subsetSize); // Ambil subset sesuai jumlah yang dihitung
+}
+// Fungsi untuk mengacak array
+function shuffleArray(array) {
+    let currentIndex = array.length, randomIndex, temporaryValue;
+
+    // Selama ada elemen yang belum diproses
+    while (currentIndex !== 0) {
+        // Pilih indeks acak
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // Tukar elemen dengan elemen acak
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
 }
 
 
-export { normalizeData }
+export { normalizeDataset, getSubset, shuffleArray }

@@ -16,7 +16,7 @@ function isArrayContainObj(arr) {
     }
 };
 
-function sliceObj(objData = [{}, {}], selectedCol = [""]) {
+function sliceObj(objData = [{}, {}], selectedCol = [""]) { // untuk memisahkan kolom dalam 1 record
     const slicedData = objData.map(obj =>
         selectedCol.reduce((acc, key) => {
             if (obj.hasOwnProperty(key)) {
@@ -34,4 +34,8 @@ function arrayToObj(arr = [""]) {
     return obj // {""}
 }
 
-export { isArrayContainObj, arrayToObj, sliceObj }
+function transformArray(arrObj = [{}, {}]) {
+    return arrObj.map(item => Object.values(item)); // [[], []]
+}
+
+export { isArrayContainObj, arrayToObj, sliceObj, transformArray }

@@ -1,6 +1,6 @@
 import { arrayToObj, sliceObj, transformArray } from "../ArrObjFunction";
 import * as tf from '@tensorflow/tfjs'
-import { getSubset, normalizeDataset } from "./DataManipulate";
+import { getSubset, normalizeDataset, valueOfColumn } from "./DataManipulate";
 
 // PROTOCOLS
 // - Send a raw dataset (include label and all features)
@@ -14,14 +14,13 @@ function NeuralNetwork(
     label = "",
     features = [""],
     option = {
-        subSet: 100 // default subset 10%
+        subSet: 10 // default subset 10%
     }
 ) {
     let selectedLabelFeat = [...features];
 
     let LetTrainingData = [...trainingData] // all fitur (include label)
-    // LetTrainingData = getSubset(LetTrainingData, option.subSet)
-    LetTrainingData = LetTrainingData, option.subSet
+    LetTrainingData = getSubset(LetTrainingData, option.subSet)
 
     let LetTestingData = { kategori: 'pakaian' }
 
@@ -57,6 +56,7 @@ function NeuralNetwork(
     //     model.predict(tf.tensor2d([TestingData], [1, 3])).print();
     // });
 
+    console.log("Pure: ", valueOfColumn(LetTrainingData))
     console.log("All: ", normalizeDataset(LetTrainingData))
     console.log("NormalizeSelected: ", selectedTrainingData)
     console.log("NormalizeLabel: ", selectedLabelData)

@@ -27,7 +27,7 @@ const MainInput = React.forwardRef((props, ref) => {
                 maxLength={maxlength}
                 type={type}
                 style={style}
-                className={`${variant} w-fit py-2 px-3 rounded-md outline-none duration-100 border border-transparent focus:border-blue-700 bg-secondary-dark placeholder:text-primary-dark-0 placeholder:opacity-40`}
+                className={`${variant} min-w-[200px] w-fit py-2 px-3 rounded-md outline-none duration-100 border border-transparent focus:border-blue-700 bg-secondary-dark placeholder:text-primary-dark-0 placeholder:opacity-40`}
                 placeholder={placeholder}
                 value={value}
                 name={name}

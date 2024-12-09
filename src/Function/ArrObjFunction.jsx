@@ -39,3 +39,5 @@ function transformArray(arrObj = [{}, {}]) {
 }
 
 export { isArrayContainObj, arrayToObj, sliceObj, transformArray }
+
+// Membuat fungsi untuk mendapatkan info dari dataset

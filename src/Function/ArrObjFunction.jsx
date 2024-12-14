@@ -16,7 +16,7 @@ function isArrayContainObj(arr) {
     }
 };
 
-function sliceObj(objData = [{}, {}], selectedCol = [""]) { // untuk memisahkan kolom dalam 1 record
+function sliceObj(objData = [{}, {}], selectedCol = [""]) { // untuk membuang kolom dalam dataset
     const slicedData = objData.map(obj =>
         selectedCol.reduce((acc, key) => {
             if (obj.hasOwnProperty(key)) {
@@ -34,10 +34,14 @@ function arrayToObj(arr = [""]) {
     return obj // {""}
 }
 
-function transformArray(arrObj = [{}, {}]) {
+function transformArray(arrObj = [{}, {}]) { // mengubah dari [{}, {}] menjadi [[], []]
     return arrObj.map(item => Object.values(item)); // [[], []]
 }
 
-export { isArrayContainObj, arrayToObj, sliceObj, transformArray }
+function transformArrayToObjects(array) { // mengubah dari [{}, {}] menjadi {}, {}
+    return array.map(obj => JSON.stringify(obj)).join(', ');
+}
+
+export { isArrayContainObj, arrayToObj, sliceObj, transformArray, transformArrayToObjects }
 
 // Membuat fungsi untuk mendapatkan info dari dataset

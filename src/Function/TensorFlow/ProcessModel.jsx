@@ -1,4 +1,4 @@
-import { arrayToObj, sliceObj, transformArray } from "../ArrObjFunction";
+import { arrayToObj, sliceObj, transformArray, transformArrayToObjects } from "../ArrObjFunction";
 import * as tf from '@tensorflow/tfjs'
 import { getSubset, normalizeDataset, valueOfColumn } from "./DataManipulate";
 
@@ -10,30 +10,63 @@ import { getSubset, normalizeDataset, valueOfColumn } from "./DataManipulate";
 
 function NeuralNetwork(
     trainingData = [{}, {}],
-    // testingData = [{}, {}],
+    testingData = [{"feat1": "val1", "feat2": "val2"}],
     label = "",
     features = [""],
     option = {
         subSet: 10 // default subset 10%
     }
 ) {
-    let selectedLabelFeat = [...features];
+    // INITIALIZE VARIABLE
+    let selectedLabelFeat = [...features] // format = ["", ""]
+    let LetTrainingData = [...trainingData] // format = [{"feat1": "val1"}, {"feat2": "val2"}] || all fitur (include label)
+    let LetTestingData = [...testingData] // format = [{"feat1": "val1", "feat2": "val2"}]
 
-    let LetTrainingData = [...trainingData] // all fitur (include label)
+    console.group("INITIALIZE VARIABLE")
+    console.info("SelectedlabelFeat: ", selectedLabelFeat)
+    console.info("LetTrainingData: ", LetTrainingData)
+    console.info("LetTestingData: ", LetTestingData)
+    console.groupEnd()
+    
+    
+    // SUBSET DATA
     LetTrainingData = getSubset(LetTrainingData, option.subSet)
+    console.group("SUBSET DATA")
+    console.info("LetTrainingData: ", LetTrainingData)
+    console.groupEnd()
 
-    let LetTestingData = { kategori: 'pakaian' }
-
+    // SLICING ONLY FEATURE
     let selectedTrainingData = sliceObj(LetTrainingData, selectedLabelFeat) // exclude label
-    selectedTrainingData = transformArray(normalizeDataset(selectedTrainingData))
-    let selectedLabelData = sliceObj(LetTrainingData, [label]) // only label
-    selectedLabelData = transformArray(normalizeDataset(selectedLabelData))
+    console.group("SLICING ONLY FEATURE")
+    console.info("selectedTrainingData: ", selectedTrainingData)
+    console.groupEnd()
 
-    // let selectedTestingData = transformArray(normalizeDataset(LetTestingData))
-    let selectedTestingData = [...sliceObj(LetTrainingData, selectedLabelFeat)]
-    selectedTestingData.push(LetTestingData)
-    selectedTestingData = transformArray(normalizeDataset(selectedTestingData))
-    let TestingData = selectedTestingData[selectedTestingData.length - 1]
+    // TESTING DATA JOIN TRAINING DATA TO NORMALIZE TOGETHER
+    selectedTrainingData = [...selectedTrainingData, ...LetTestingData]
+    console.group("TESTING DATA JOIN TRAINING DATA TO NORMALIZE TOGETHER")
+    console.info("selectedTrainingData: ", selectedTrainingData)
+    console.info("LetTestingData: ", LetTestingData)
+    console.groupEnd()
+    
+    selectedTrainingData = transformArray(normalizeDataset(selectedTrainingData))
+    console.group("NORMALIZE TOGETHER")
+    console.info("selectedTrainingData: ", selectedTrainingData)
+    console.groupEnd()
+
+    // TAKE BACK TESTING DATA FROM TRAINING DATA
+    let selectedTestingData = selectedTrainingData.slice(-1)[0] // format = [[0, 2]]
+    console.group("TAKE BACK TESTING DATA FROM TRAINING DATA")
+    console.info("selectedTestingData: ", selectedTestingData)
+    console.groupEnd()
+
+    // // DROP TESTING DATA FROM TRAINING DATA
+    selectedTrainingData.pop() // format = [[0, 1, 2, 4]...]
+    console.group("DROP TESTING DATA FROM TRAINING DATA")
+    console.info("selectedTrainingData: ", selectedTrainingData)
+    console.groupEnd()
+
+    // let selectedLabelData = sliceObj(LetTrainingData, [label]) // only label
+    // selectedLabelData = transformArray(normalizeDataset(selectedLabelData))
 
 
     // TENSORFLOW
@@ -55,14 +88,11 @@ function NeuralNetwork(
     //     // Prediksi untuk input baru
     //     model.predict(tf.tensor2d([TestingData], [1, 3])).print();
     // });
-
-    console.log("Pure: ", valueOfColumn(LetTrainingData))
-    console.log("All: ", normalizeDataset(LetTrainingData))
-    console.log("NormalizeSelected: ", selectedTrainingData)
-    console.log("NormalizeLabel: ", selectedLabelData)
-    console.log("Testing NormalizeSelected: ", TestingData)
 }
 
 
 
 export { NeuralNetwork }
+
+// MEMBUAT KONFIGURASI LABEL
+// PERSIAPAN DATA FEATURE DAN TESTING SUDAH SIAP (INCLUDE NORMALIZE)

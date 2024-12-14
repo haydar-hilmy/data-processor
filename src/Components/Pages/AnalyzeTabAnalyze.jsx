@@ -49,9 +49,9 @@ const AnalyzeTabAnalyze = () => {
 
     const [testingInputs, setTestingInputs] = useState(selectedFeatures)
     const addTestingInput = () => {
-        // setTestingInputs([...selectedFeatures])
-        setTestingInputs(new Array(selectedFeatures.length).fill(''));
-    }
+        const obj = Object.fromEntries(selectedFeatures.map(feature => [feature, '']));
+        setTestingInputs([obj]);
+    };
 
     const { iddataset } = useParams()
 
@@ -75,7 +75,7 @@ const AnalyzeTabAnalyze = () => {
     ////////////// STARTING PROCESS ///////////////
     const processClf = () => {
         if (clfMod == "Neural Network") {
-            NeuralNetwork(tbodyMainDataset, labelAnalysis, selectedFeatures)
+            NeuralNetwork(tbodyMainDataset, testingInputs, labelAnalysis, selectedFeatures)
         } else {
             console.log("Else")
         }
@@ -106,9 +106,9 @@ const AnalyzeTabAnalyze = () => {
 
 
     useEffect(() => {
-      console.log(testingInputs)
+        console.info("Testing input: ", testingInputs)
     }, [testingInputs])
-    
+
 
 
     return (
@@ -206,47 +206,50 @@ const AnalyzeTabAnalyze = () => {
                                                         }
                                                         <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-3">
                                                             {
-                                                                testingInputs.map((tInp, idx) => (
-                                                                    <div key={idx}>
-                                                                        {
-                                                                            valueOfColMainDataset
-                                                                                .filter((row) => row.hasOwnProperty(selectedFeatures[idx]))
-                                                                                .map((row, rowIdx) => (
-                                                                                    <div key={rowIdx}>
-                                                                                        {row[selectedFeatures[idx]].type == "numerical" ? (
-                                                                                            <LabeledInput
-                                                                                                type={"number"}
-                                                                                                info={`Suggestion: ${row[selectedFeatures[idx]].data.min} - ${row[selectedFeatures[idx]].data.max}`}
-                                                                                                value={tInp[selectedFeatures[idx]]}
-                                                                                                name={`${selectedFeatures[idx]}_testingCls`}
-                                                                                                placeholder={`Testing ${selectedFeatures[idx]}`}
-                                                                                                text={selectedFeatures[idx]}
-                                                                                                onchange={(e) => {
-                                                                                                    const newInputs = [...testingInputs];
-                                                                                                    newInputs[idx] = { [selectedFeatures[idx]]: e.target.value};
-                                                                                                    setTestingInputs(newInputs);
-                                                                                                }} />
-                                                                                        ) : row[selectedFeatures[idx]].type == "categorical" ? (
-                                                                                            <DropDown
-                                                                                                value={tInp[selectedFeatures[idx]]}
-                                                                                                label={selectedFeatures[idx]}
-                                                                                                name={`${selectedFeatures[idx]}_testingCls`}
-                                                                                                text={`Testing ${selectedFeatures[idx]}`}
-                                                                                                data={row[selectedFeatures[idx]].data}
-                                                                                                onchange={(eValue) => {
-                                                                                                    const newInputs = [...testingInputs];
-                                                                                                    newInputs[idx] = { [selectedFeatures[idx]]: eValue};
-                                                                                                    setTestingInputs(newInputs);
-                                                                                                }}
-                                                                                            />
-                                                                                        )
-                                                                                            : ("undefined")}
-                                                                                    </div>
-                                                                                ))
-                                                                        }
-                                                                    </div>
+                                                                testingInputs.map((obj, objIdx) => (
+                                                                    Object.keys(obj).map((row, rowIdx) => (
+                                                                        valueOfColMainDataset
+                                                                            .filter((vCol) => vCol.hasOwnProperty(selectedFeatures[rowIdx]))
+                                                                            .map((vCol, vColIdx) => (
+                                                                                <div key={vColIdx}>
+                                                                                    {vCol[selectedFeatures[rowIdx]].type == 'numerical' ? (
+                                                                                        <LabeledInput
+                                                                                            type={"number"}
+                                                                                            info={`Suggestion: ${vCol[selectedFeatures[rowIdx]].data.min} - ${vCol[selectedFeatures[rowIdx]].data.max}`}
+                                                                                            value={obj[selectedFeatures[rowIdx]]}
+                                                                                            name={`${selectedFeatures[rowIdx]}_testingCls`}
+                                                                                            placeholder={`Testing ${selectedFeatures[rowIdx]}`}
+                                                                                            text={selectedFeatures[rowIdx]}
+                                                                                            onchange={(e) => {
+                                                                                                const newInputs = [...testingInputs];
+                                                                                                newInputs[objIdx] = { 
+                                                                                                    ...newInputs[objIdx],
+                                                                                                    [selectedFeatures[rowIdx]]: e.target.value
+                                                                                                };
+                                                                                                setTestingInputs(newInputs);
+                                                                                            }} />
+                                                                                    ) : vCol[selectedFeatures[rowIdx]].type == "categorical" ? (
+                                                                                        <DropDown
+                                                                                            value={obj[selectedFeatures[rowIdx]]}
+                                                                                            label={selectedFeatures[rowIdx]}
+                                                                                            name={`${selectedFeatures[rowIdx]}_testingCls`}
+                                                                                            text={`Testing ${selectedFeatures[rowIdx]}`}
+                                                                                            data={vCol[selectedFeatures[rowIdx]].data}
+                                                                                            onchange={(eValue) => {
+                                                                                                const newInputs = [...testingInputs];
+                                                                                                newInputs[objIdx] = { 
+                                                                                                    ...newInputs[objIdx],
+                                                                                                    [selectedFeatures[rowIdx]]: eValue };
+                                                                                                setTestingInputs(newInputs);
+                                                                                            }}
+                                                                                        />
+                                                                                    ) : ("Undefined")}
+                                                                                </div>
+                                                                            ))
+                                                                    ))
                                                                 ))
                                                             }
+
                                                         </div>
                                                     </div>
                                                     <ButtonMain variant="bg-btn-primary" onclick={() => processClf()}><PlayArrow /> Process</ButtonMain>

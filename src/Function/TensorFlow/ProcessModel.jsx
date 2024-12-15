@@ -98,7 +98,15 @@ function NeuralNetwork(
     // console.info("Length: ", [selectedLabelData.length, selectedLabelData[0].length])
     // console.groupEnd()
 
+    console.info("Processing Tensorflow...")
+    console.info("...")
+    const startTime = performance.now();
     model.fit(xs, ys, { epochs: 10, shuffle: false }).then(() => {
+        const endTime = performance.now();
+        const processingTimeInSeconds = ((endTime - startTime) / 1000).toFixed(2);
+        console.info("Tensorflow well done!")
+        console.info(`Time to execute: ${processingTimeInSeconds}s`);
+
         // Prediksi untuk input baru
         model.predict(
             tf.tensor2d([selectedTestingData], [1, selectedTrainingData[0].length])

@@ -99,7 +99,7 @@ const AnalyzeTabAnalyze = () => {
         } else {
             console.log("Else")
         }
-        console.log(`feat: ${selectedFeatures}, Model: ${clfMod}, Label: ${labelAnalysis}`)
+        // console.log(`feat: ${selectedFeatures}, Model: ${clfMod}, Label: ${labelAnalysis}`) // uncomment for debugging
     }
 
 

@@ -22,6 +22,7 @@ function NeuralNetwork(
     let LetTrainingData = [...trainingData] // format = [{"feat1": "val1"}, {"feat2": "val2"}] || all fitur (include label)
     let LetTestingData = [...testingData] // format = [{"feat1": "val1", "feat2": "val2"}]
     // console.group("INITIALIZE VARIABLE")
+    console.log("Option: ", option)
     // console.info("SelectedlabelFeat: ", selectedLabelFeat)
     // console.info("LetTrainingData: ", LetTrainingData)
     // console.info("LetTestingData: ", LetTestingData)
@@ -31,14 +32,14 @@ function NeuralNetwork(
     // SUBSET DATA
     LetTrainingData = getSubset(LetTrainingData, option.subSet)
     // console.group("SUBSET DATA")
-    // console.info("LetTrainingData: ", LetTrainingData)
+    console.info("LetTrainingData: ", LetTrainingData)
     // console.groupEnd()
 
     // GET LABEL DATA
     let selectedLabelData = sliceObj([...LetTrainingData], [label])
     // console.group("GET LABEL AND NORMALIZE")
     // console.info("selectedLabelData: ", selectedLabelData)
-    // selectedLabelData = transformArray(normalizeDataset(selectedLabelData))
+    selectedLabelData = transformArray(normalizeDataset(selectedLabelData))
     // console.info("selectedLabelData normalize: ", selectedLabelData)
     // console.groupEnd()
 
@@ -97,7 +98,7 @@ function NeuralNetwork(
     // console.info("Length: ", [selectedLabelData.length, selectedLabelData[0].length])
     // console.groupEnd()
 
-    model.fit(xs, ys, { epochs: 10 }).then(() => {
+    model.fit(xs, ys, { epochs: 10, shuffle: false }).then(() => {
         // Prediksi untuk input baru
         model.predict(
             tf.tensor2d([selectedTestingData], [1, selectedTrainingData[0].length])

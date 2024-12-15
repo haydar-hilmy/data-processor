@@ -47,6 +47,9 @@ const AnalyzeTabAnalyze = () => {
 
     const [valueOfColMainDataset, setValueOfColMainDataset] = useState([])
 
+    const [thresHold, setThresHold] = useState("")
+    const [subSetPercentage, setSubsetPercentage] = useState(30)
+
     const [testingInputs, setTestingInputs] = useState(selectedFeatures)
     const addTestingInput = () => {
         const obj = Object.fromEntries(selectedFeatures.map(feature => [feature, '']));
@@ -64,18 +67,35 @@ const AnalyzeTabAnalyze = () => {
             setTbodyMaindataset(result.data)
             setTypeMainDataset(splitDataByType(result.data, detectColumnType(result.data)))
             setRecommendLabel(recommendLabelColumn(result.data))
-            setValueOfColMainDataset(valueOfColumn(getSubset(result.data, 30)))
+            setValueOfColMainDataset(valueOfColumn(getSubset(result.data, subSetPercentage)))
+            console.log("INIT")
         }).catch(err => {
             console.error(err);
         });
-    }, [iddataset])
+    }, [iddataset, subSetPercentage])
 
+    const handleSubsetPercentage = (percent) => {
+        if(tbodyMainDataset.length <= 20 && percent == 10){
+            setSubsetPercentage(0)
+        } else {
+            setSubsetPercentage(percent)
+        }
+    }
+    
 
 
     ////////////// STARTING PROCESS ///////////////
     const processClf = () => {
         if (clfMod == "Neural Network") {
-            NeuralNetwork(tbodyMainDataset, testingInputs, labelAnalysis, selectedFeatures)
+            NeuralNetwork(
+                tbodyMainDataset, 
+                testingInputs, 
+                labelAnalysis, 
+                selectedFeatures,
+                {
+                    subSet: parseInt(subSetPercentage)
+                }
+            )
         } else {
             console.log("Else")
         }
@@ -181,6 +201,26 @@ const AnalyzeTabAnalyze = () => {
 
                                     <div className="mt-3">
                                         <h1 className="text-xl mb-4">Analyze Parameter</h1>
+                                        <div className="flex flex-col sm:flex-row items-start gap-4">
+                                            <DropDown
+                                                label="Set Subset Total"
+                                                value={subSetPercentage}
+                                                name="subset_val"
+                                                onchange={(value) => handleSubsetPercentage(value)}
+                                                data={[100, 90, 80, 70, 60, 50, 40, 30, 20, 10]}
+                                                text="Select a value"
+                                                info={`${subSetPercentage}% of total record`}
+                                            />
+                                            <DropDown
+                                                label="Set Threshold Value"
+                                                value={thresHold}
+                                                name="threshold_val"
+                                                onchange={(value) => setThresHold(value)}
+                                                data={[1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]}
+                                                text="Select a value"
+                                                info="classification prediction determinant"
+                                            />
+                                        </div>
                                         {
                                             analyzeMethod == "classification" ? (
                                                 <div className="flex flex-col items-start gap-4">
@@ -222,7 +262,7 @@ const AnalyzeTabAnalyze = () => {
                                                                                             text={selectedFeatures[rowIdx]}
                                                                                             onchange={(e) => {
                                                                                                 const newInputs = [...testingInputs];
-                                                                                                newInputs[objIdx] = { 
+                                                                                                newInputs[objIdx] = {
                                                                                                     ...newInputs[objIdx],
                                                                                                     [selectedFeatures[rowIdx]]: e.target.value
                                                                                                 };
@@ -237,9 +277,10 @@ const AnalyzeTabAnalyze = () => {
                                                                                             data={vCol[selectedFeatures[rowIdx]].data}
                                                                                             onchange={(eValue) => {
                                                                                                 const newInputs = [...testingInputs];
-                                                                                                newInputs[objIdx] = { 
+                                                                                                newInputs[objIdx] = {
                                                                                                     ...newInputs[objIdx],
-                                                                                                    [selectedFeatures[rowIdx]]: eValue };
+                                                                                                    [selectedFeatures[rowIdx]]: eValue
+                                                                                                };
                                                                                                 setTestingInputs(newInputs);
                                                                                             }}
                                                                                         />

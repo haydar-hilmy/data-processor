@@ -74,6 +74,9 @@ function normalizeDataset(data = [{}, {}]) {
 }
 
 function getSubset(data, percentage = 10) {
+    // console.group("getSubset(): Function")
+    // console.log(`Percentage: ${percentage}`)
+    // console.groupEnd()
     // Pastikan persentase berada dalam rentang yang valid (0-100)
     if (percentage < 0 || percentage > 100) {
         throw new Error("Percentage must be between 0 and 100");
